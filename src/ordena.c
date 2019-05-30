@@ -32,16 +32,16 @@ void quicksort(int *vetor, int start, int end) {
 	}
 }
 
-void selection(int *vetor, int end) {
+void selection(cache_t *cache, int *vetor) {
 	int l,temp;
 
-    for (int k = 0; k < end; k++) {
+    for (int k = 0; k < memSize; k++) {
 		l = k;
-		for (int j = k; j < end; j++) {
+		for (int j = k; j < memSize; j++) {
 			if (vetor[j] < vetor[l]) {
-				pushCache(j);
-				prtCache();
 				l = j;
+				cacheSim(cache,16,l);
+				prtCache(cache,16);
 			}
 		}
         temp = vetor[l];
@@ -50,17 +50,20 @@ void selection(int *vetor, int end) {
 	}
 }
 
-void bubbleSrt(int *vetor, int end) {
+void bubbleSrt(cache_t *cache) {
 	int temp;
 
-	for (int i = 0; i < end; i++) {
-		for (int j = 0; j < end-i; j++) {
-			if (vetor[j] > vetor[j+1]) {
-				pushCache(j);
-				prtCache();
-				temp = vetor[j];
-				vetor[j] = vetor[j+1];
-				vetor[j+1] = temp;
+	for (int i=0; i<memSize; i++) {
+		for (int j = 0; j < memSize-i; j++) {
+			//prtCache(cache,16);
+			if ( getCache(cache,16,j) > getCache(cache,16,j+1) ) {
+				temp = getCache(cache,16,j);
+				int a,b;
+				a = getCache(cache,16,j);
+				b = getCache(cache,16,j+1);
+				a = b;
+				setCache(cache,16,j,a);
+				setCache(cache,16,j+1,temp);
 			}
 		}
 	}

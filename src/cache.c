@@ -1,24 +1,60 @@
 #include "main.h"
 
-int mod(int memAddr) {
-	return memAddr % cacheSize;
+
+void cacheSim(cache_t *cache, int linhas, int memAddr) {
+	unsigned cacheAddr = memAddr % linhas;
+	cache[cacheAddr].tag = memAddr/linhas;
+	cache[cacheAddr].linha[1] = memory[memAddr];
 }
 
-void initCache() {
-	for (int i = 0; i < cacheSize; i++) {
-        cache[i] = 0;
+void initCache(cache_t *cache, int linhas) {
+	for ( int i=0; i<linhas; i++ ) {
+		cache[i].validade = false;
+		cache[i].tag = -1;
+		cache[i].linha[1] = 0;
 	}
 }
 
-void pushCache(int memAddr) {
-	unsigned cacheAddr = memAddr % cacheSize;
-	//printf("%d\n", cacheAddr);
-	cache[cacheAddr] = memory[memAddr];
+void cacheHit(bool hit) {
+	static unsigned cachehit;
+	static unsigned cachemiss;
+	if (hit) cachehit++;
+	else cachemiss++;
+	printf(" %d %d\n", cachehit, cachemiss);
 }
 
-void prtCache() {
-	system("clear");
-	for (int i = 0; i < cacheSize; i++) {
-        printf(" %02d "bBLUE"\u258F%010d\u2595"cRSET"\n", i, cache[i]);
+int getCache(cache_t *cache, int linhas, int memAddr) {
+
+	unsigned cacheAddr = memAddr % linhas;
+	int cacheTag  = memAddr / linhas;
+	bool valido = cache[cacheAddr].validade;
+
+	if ( valido && cache[cacheAddr].tag == cacheTag ) {
+		cacheHit(true);
+		return cache[cacheAddr].linha[0];
+	}
+	else {
+		cacheHit(false);
+		cache[cacheAddr].validade = true;
+		cache[cacheAddr].tag = cacheTag;
+		cache[cacheAddr].linha[0] = memory[memAddr];
+		return cache[cacheAddr].linha[0];
+	}
+
+	return -1;
+}
+
+void setCache(cache_t *cache, int linhas, int memAddr, int value) {
+	unsigned cacheAddr = memAddr % linhas;
+	int cacheTag  = memAddr / linhas;
+	cache[cacheAddr].validade = true;
+	cache[cacheAddr].tag = cacheTag;
+	cache[cacheAddr].linha[0] = value;
+	memory[memAddr] = value;
+}
+
+void prtCache(cache_t *cache, int linhas) {
+	for (int i=0; i<linhas; i++) {
+        printf(" %02X \u2192 %03d %06X\n", i, cache[i].tag, cache[i].linha[0]);
 	}
 }

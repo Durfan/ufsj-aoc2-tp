@@ -20,17 +20,22 @@ bool isPowerTwo(int x) {
 
 int main(void) {
 
+	cache_t cache[16];
+	initCache(cache,16);
+
 	system("clear");
 
 	getMem();
-	initCache();
 	//ptrMem();
 	
 	//quicksort(memory,0,memSize);
-	selection(memory,memSize);
-	//bubbleSrt(memory,memSize);
-	
-	printf("\n\n Memory SIZE = %lu bytes\n\n", sizeof(memory));
+	//selection(cache,memory);
+	bubbleSrt(cache);
+
+	ptrMem();
+
+	printf("\n\n Memory SIZE = %lu bytes\n", sizeof(memory));
+	printf("  Cache SIZE = %lu bytes\n\n", sizeof(cache[0].linha[0])*16);
 
 	return 0;
 }

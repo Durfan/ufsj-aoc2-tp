@@ -13,10 +13,10 @@ void getMem() {
 
 void ptrMem() {
     uint8_t line = 0;
-	for (int i = 0; i < memSize; i++) {
-        printf(" %05d "bBLUE"\u258F%010d\u2595"cRSET, i<<2, memory[i]);
+	for (int i=0; i<memSize; i++) {
+        printf(" %03X\u2192%06X", i, memory[i]);
         line++;
-        if (line > 3) {
+        if (line > 6) {
             line = 0;
             printf("\n");
         }

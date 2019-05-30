@@ -8,11 +8,8 @@
 
 #define seedArq "/dev/urandom"
 #define memSize 4096
-#define cacheSize 16
-#define address 32
 
 int memory[memSize];
-int cache[cacheSize];
 
 #include "mem.h"
 #include "cache.h"
