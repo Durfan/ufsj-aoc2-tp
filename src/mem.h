@@ -1,7 +1,8 @@
-#ifndef SIMCACHE_MEM_H
-#define SIMCACHE_MEM_H
+#ifndef MEM_H
+#define MEM_H
 
-void getMem();
-void ptrMem();
+void getMEM();
+void setMEM(mem_t mem);
+void ptrMEM();
 
-#endif //SIMCACHE_MEM_H
+#endif //MEM_H

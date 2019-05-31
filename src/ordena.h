@@ -1,10 +1,9 @@
-#ifndef SIMCACHE_ORDENA_H
-#define SIMCACHE_ORDENA_H
+#ifndef ORDENA_H
+#define ORDENA_H
 
-void qks_swap(int *p, int *q);
-int  partition(int *vetor, int start, int end);
-void quicksort(int *vetor, int start, int end);
-void selection(cache_t *cache, int *vetor);
-void bubbleSrt(cache_t *cache);
+int  partition(cache_t *cache, config_t config, int start, int end);
+void quicksort(cache_t *cache, config_t config, int start, int end);
+void selection(cache_t *cache, config_t config);
+void bubbleSrt(cache_t *cache, config_t config);
 
-#endif //SIMCACHE_ORDENA_H
+#endif //ORDENA_H

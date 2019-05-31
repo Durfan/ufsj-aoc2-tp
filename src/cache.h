@@ -1,17 +1,12 @@
-#ifndef SIMCACHE_CACHE_H
-#define SIMCACHE_CACHE_H
+#ifndef CACHE_H
+#define CACHE_H
 
-typedef struct cache {
-    bool validade;
-    int tag;
-    int linha[1];
-} cache_t;
+cache_t *iniCache(config_t config);
+void cacheHit(count_t count);
+int  getCache(cache_t *cache, config_t config, int memAddr);
+void setCache(cache_t *cache, config_t config, int memAddr, int value);
+void prtCache(cache_t *cache, config_t config);
 
-void cacheSim(cache_t *cache, int linhas, int memAddr);
-void cacheHit(bool hit);
-void setCache(cache_t *cache, int linhas, int memAddr, int value);
-void initCache(cache_t *cache, int linhas);
-int getCache(cache_t *cache, int linhas, int memAddr);
-void prtCache(cache_t *cache, int linhas);
+void freedooooom(cache_t *cache, config_t config);
 
-#endif //SIMCACHE_CACHE_H
+#endif //CACHE_H

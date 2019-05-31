@@ -1,6 +1,6 @@
 #include "main.h"
 
-void getMem() {
+void getMEM() {
 	FILE *fp = fopen(seedArq,"r");
     if (fp == NULL) exit(1);
 
@@ -11,7 +11,22 @@ void getMem() {
     fclose(fp);
 }
 
-void ptrMem() {
+void setMEM(mem_t mem) {
+
+    switch (mem) {
+		case create:
+			getMEM();
+            memcpy(memBCK,memory,sizeof(memory));
+			break;
+		case restore:
+            memcpy(memory,memBCK,sizeof(memBCK));
+			break;
+		default:
+			exit(1);
+	}
+}
+
+void ptrMEM() {
     uint8_t line = 0;
 	for (int i=0; i<memSize; i++) {
         printf(" %03X\u2192%06X", i, memory[i]);

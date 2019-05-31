@@ -1,41 +1,57 @@
 #include "main.h"
 
-typedef enum {direto,conjunto,full} block_t;
-typedef enum {LRU,LFU,FIFO} psubs_t;
-
-typedef struct config {
-	uint8_t size;	// 16, 32, 64, 128, 256 e 512 words
-	uint8_t blocks;	// 1, 2, 4, 8, 16 e 32 words por bloco
-	block_t map;	// direto, associativo por conjunto e totalmente associativo
-	uint8_t assoc;	// por conjunto de 2 vias, 4 vias e 8 vias
-	psubs_t polS;	// LRU, LFU e FIFO
-	bool polW;		// write-through e write-back
-} config_t;
-
-config_t config = {16,1,0,0,2,0};
-
 bool isPowerTwo(int x) {
 	return(x & (x-1));
 }
 
+double ftempo(struct timeval tv1, struct timeval tv2) {
+    return (double)(tv2.tv_usec - tv1.tv_usec)/1000000 +
+           (double)(tv2.tv_sec-tv1.tv_sec);
+}
+
 int main(void) {
 
-	cache_t cache[16];
-	initCache(cache,16);
+	struct timeval tv1, tv2;
+	setMEM(create);
+	
+	config_t config;
+	config.words = 16;
+	config.tamBloco = 1;
+	config.linhas = config.words/config.tamBloco;
+	cache_t *cache = iniCache(config);
 
 	system("clear");
 
-	getMem();
-	//ptrMem();
+    printf(" SIMCACHE AOCII/TP1\n\n");
+	printf(" Cache/Words: %d max\n", config.words);
+	printf(" Words/Bloco: %d words/bloco\n", config.tamBloco);
+	printf(" Cache/Linha: %d linhas\n", config.linhas);
+	printf(" Memory SIZE: %lu bytes\n", sizeof(memory));
+	printf("  Cache SIZE: %lu bytes\n", sizeof(*cache->bloco)*config.linhas);
 	
-	//quicksort(memory,0,memSize);
-	//selection(cache,memory);
-	bubbleSrt(cache);
+	gettimeofday(&tv1,NULL);
+	quicksort(cache,config,0,memSize);
+	gettimeofday(&tv2,NULL);
+	printf("\n QuickSort  (%fs)\n", ftempo(tv1,tv2));
+	cacheHit(print);
+	cacheHit(reset);
+	
+	setMEM(restore);
+	gettimeofday(&tv1,NULL);
+	selection(cache,config);
+	gettimeofday(&tv2,NULL);
+	printf("\n Selection  (%fs)\n", ftempo(tv1,tv2));
+	cacheHit(print);
+	cacheHit(reset);
+	
+	setMEM(restore);
+	gettimeofday(&tv1,NULL);
+	bubbleSrt(cache,config);
+	gettimeofday(&tv2,NULL);
+	printf("\n BubbleSort (%fs)\n", ftempo(tv1,tv2));
+	cacheHit(print);
 
-	ptrMem();
-
-	printf("\n\n Memory SIZE = %lu bytes\n", sizeof(memory));
-	printf("  Cache SIZE = %lu bytes\n\n", sizeof(cache[0].linha[0])*16);
+	freedooooom(cache,config);
 
 	return 0;
 }
