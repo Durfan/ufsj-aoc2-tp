@@ -1,13 +1,20 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-typedef enum {miss,hit,print,reset} count_t;
-typedef enum {create,restore} mem_t;
+#define cRED  "\x1b[31m"
+#define cGREN "\x1b[32m"
+#define cYELL "\x1b[33m"
+#define cBLUE "\x1b[36m"
+#define cGRAY "\x1b[90m"
+#define bBLUE "\x1b[44m"
+#define cRSET "\x1b[0m"
+
+typedef enum {create,miss,hit,print,restore,reset} opcao_t;
 
 typedef struct config {
 	int words;		// 16, 32, 64, 128, 256 e 512 words
 	int tamBloco;	// 1, 2, 4, 8, 16 e 32 words por bloco
-    int linhas;
+    int sets;
 } config_t;
 
 typedef struct cache {
@@ -15,5 +22,12 @@ typedef struct cache {
     int *tag;
     int *bloco;
 } cache_t;
+
+void getMEM();
+void setMEM(opcao_t opt);
+void ptrMEM();
+
+bool isPowerTwo(int x);
+double ftempo(struct timeval tv1, struct timeval tv2);
 
 #endif //CONFIG_H

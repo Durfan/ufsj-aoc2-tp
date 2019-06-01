@@ -1,5 +1,6 @@
 #include "main.h"
 
+
 void getMEM() {
 	FILE *fp = fopen(seedArq,"r");
     if (fp == NULL) exit(1);
@@ -11,9 +12,9 @@ void getMEM() {
     fclose(fp);
 }
 
-void setMEM(mem_t mem) {
+void setMEM(opcao_t opt) {
 
-    switch (mem) {
+    switch (opt) {
 		case create:
 			getMEM();
             memcpy(memBCK,memory,sizeof(memory));
@@ -36,4 +37,13 @@ void ptrMEM() {
             printf("\n");
         }
 	}
+}
+
+bool isPowerTwo(int x) {
+	return(x & (x-1));
+}
+
+double ftempo(struct timeval tv1, struct timeval tv2) {
+    return (double)(tv2.tv_usec - tv1.tv_usec)/1000000 +
+           (double)(tv2.tv_sec-tv1.tv_sec);
 }

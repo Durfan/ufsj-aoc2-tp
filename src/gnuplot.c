@@ -1,7 +1,6 @@
 #include "main.h"
 
 void plot() {
-	printf("teste");
 	FILE *pipe = popen("gnuplot -persist", "w");
 
     if ( pipe == NULL ) {

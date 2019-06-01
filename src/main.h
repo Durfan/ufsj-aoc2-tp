@@ -10,10 +10,8 @@
 #include <assert.h>
 
 #include "config.h"
-#include "mem.h"
 #include "cache.h"
 #include "ordena.h"
-#include "Tcolors.h"
 #include "gnuplot.h"
 
 #define seedArq "/dev/urandom"
@@ -21,5 +19,6 @@
 
 int memory[memSize];
 int memBCK[memSize];
+config_t config;
 
 #endif //MAIN_H

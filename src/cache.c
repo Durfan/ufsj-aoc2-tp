@@ -1,11 +1,11 @@
 #include "main.h"
 
 
-cache_t *iniCache(config_t config) {
-    cache_t *cache = malloc(config.linhas*sizeof(cache_t));
+cache_t *iniCache() {
+    cache_t *cache = malloc(config.sets*sizeof(cache_t));
     assert(cache);
 
-    for (int i=0; i<config.linhas; i++) {
+    for (int i=0; i<config.sets; i++) {
 		cache[i].validade = false;
 		cache[i].bloco = malloc(config.tamBloco*sizeof(int));
 		cache[i].tag   = malloc(config.tamBloco*sizeof(int));
@@ -16,10 +16,17 @@ cache_t *iniCache(config_t config) {
     return cache;
 }
 
-void cacheHit(count_t count) {
-	static unsigned Hit, Miss;
+void rstCache(cache_t *cache) {
+	for (int i=0; i<config.sets; i++) {
+        cache[i].validade = false;
+	}
+}
 
-	switch (count) {
+void cacheHit(opcao_t opt) {
+	static unsigned Hit, Miss;
+	float hitrate, missrate;
+
+	switch (opt) {
 		case miss:
 			Miss++;
 			break;
@@ -27,56 +34,58 @@ void cacheHit(count_t count) {
 			Hit++;
 			break;
 		case print:
-			printf(" Cache HIT  = %d\n", Hit);
-			printf(" Cache MISS = %d\n", Miss);
-			break;
-		case reset:
+			hitrate  = ((float)Hit/((float)Miss+(float)Hit))*100;
+			missrate = 100 - hitrate;
+			printf("HIT: [%.2f] %d",  hitrate, Hit);
+			printf("  MISS: [%.2f] %d", missrate, Miss);
 			Hit  = 0;
 			Miss = 0;
 			break;
 		default:
-			assert(count >= 0 && count <= 2);
+			assert(opt >= 0 && opt <= 2);
 			break;
 	}
 }
 
-int getCache(cache_t *cache, config_t config, int memAddr) {
-	unsigned cacheAddr = memAddr % config.linhas;
-	int cacheTag  = memAddr / config.linhas;
-	bool valido = cache[cacheAddr].validade;
+int getCache(cache_t *cache, int memAddr) {
+	int index = memAddr % config.sets;
+	int tag   = memAddr / config.sets;
+	bool valido = cache[index].validade;
 
-	if ( valido && cache[cacheAddr].tag[0] == cacheTag ) {
+	int offsetBloco = index % config.tamBloco;
+
+	if ( valido && cache[index].tag[0] == tag ) {
 		cacheHit(hit);
-		return cache[cacheAddr].bloco[0];
+		return cache[index].bloco[offsetBloco];
 	}
 	else {
 		cacheHit(miss);
-		cache[cacheAddr].validade = true;
-		cache[cacheAddr].tag[0] = cacheTag;
-		cache[cacheAddr].bloco[0] = memory[memAddr];
-		return cache[cacheAddr].bloco[0];
+		cache[index].validade = true;
+		cache[index].tag[0] = tag;
+		memcpy(cache[index].bloco,&memory[memAddr],sizeof(int)*config.tamBloco);
+		return cache[index].bloco[offsetBloco];
 	}
 
 	return -1;
 }
 
-void setCache(cache_t *cache, config_t config, int memAddr, int value) {
-	unsigned cacheAddr = memAddr % config.linhas;
-	int cacheTag  = memAddr / config.linhas;
-	cache[cacheAddr].validade = true;
-	cache[cacheAddr].tag[0] = cacheTag;
-	cache[cacheAddr].bloco[0] = value;
+void setCache(cache_t *cache, int memAddr, int value) {
+	unsigned index = memAddr % config.sets;
+	int tag  = memAddr / config.sets;
+	cache[index].validade = true;
+	cache[index].tag[0] = tag;
+	cache[index].bloco[0] = value;
 	memory[memAddr] = value;
 }
 
-void prtCache(cache_t *cache, config_t config) {
-	for (int i=0; i<config.linhas; i++) {
+void prtCache(cache_t *cache) {
+	for (int i=0; i<config.sets; i++) {
         printf(" %02X \u2192 %03d %06X\n", i, cache[i].tag[0], cache[i].bloco[0]);
 	}
 }
 
-void freedooooom(cache_t *cache, config_t config) {
-	for (int i=0; i<config.linhas; i++) {
+void freedooooom(cache_t *cache) {
+	for (int i=0; i<config.sets; i++) {
 		free(cache[i].tag);
         free(cache[i].bloco);
 	}
