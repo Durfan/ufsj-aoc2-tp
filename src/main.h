@@ -5,12 +5,11 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include <stdint.h>
 #include <sys/time.h>
 #include <assert.h>
 
 #include "config.h"
-#include "cache.h"
+#include "dmCache.h"
 #include "ordena.h"
 #include "gnuplot.h"
 
@@ -20,5 +19,6 @@
 int memory[memSize];
 int memBCK[memSize];
 config_t config;
+struct timeval tv1, tv2;
 
 #endif //MAIN_H

@@ -4,24 +4,24 @@
 int partition(cache_t *cache, int start, int end) {
 	int pivot, pindex;
 	int temp;
-	pivot = getCache(cache,end);
+	pivot = rdyCache(cache,end);
 	pindex = start;
 
 	for (int i=start; i<end; i++) {
-		if ( getCache(cache,i) <= pivot ) {
-			temp = getCache(cache,i);
-			getCache(cache,i);
-			setCache(cache,i,getCache(cache,pindex));
-			getCache(cache,pindex);
-			setCache(cache,pindex,temp);
+		if ( rdyCache(cache,i) <= pivot ) {
+			temp = rdyCache(cache,i);
+			rdyCache(cache,i);
+			wrtCache(cache,i,rdyCache(cache,pindex));
+			rdyCache(cache,pindex);
+			wrtCache(cache,pindex,temp);
 			pindex++;
 		}
 	}
-	temp = getCache(cache,pindex);
-	getCache(cache,pindex);
-	setCache(cache,pindex,getCache(cache,end));
-	getCache(cache,end);
-	setCache(cache,end,temp);
+	temp = rdyCache(cache,pindex);
+	rdyCache(cache,pindex);
+	wrtCache(cache,pindex,rdyCache(cache,end));
+	rdyCache(cache,end);
+	wrtCache(cache,end,temp);
 
 	return pindex;
 }
@@ -42,30 +42,32 @@ void selection(cache_t *cache) {
     for (int k=0; k<memSize; k++) {
 		l = k;
 		for (int j=k; j<memSize; j++) {
-			if ( getCache(cache,j) < getCache(cache,l) ) {
+			if ( rdyCache(cache,j) < rdyCache(cache,l) ) {
 				l = j;
 			}
 		}
-        temp = getCache(cache,l);
-		getCache(cache,l);
-		setCache(cache,l,getCache(cache,k));
-		getCache(cache,k);
-		setCache(cache,k,temp);
+        temp = rdyCache(cache,l);
+		rdyCache(cache,l);
+		wrtCache(cache,l,rdyCache(cache,k));
+		rdyCache(cache,k);
+		wrtCache(cache,k,temp);
 	}
 }
 
 void bubbleSrt(cache_t *cache) {
+	gettimeofday(&tv1,NULL);
 	int temp;
 	
 	for (int i=0; i<memSize; i++) {
-		for (int j=0; j<memSize-i; j++) {
-			if ( getCache(cache,j) > getCache(cache,j+1) ) {
-				temp = getCache(cache,j);
-				getCache(cache,j);
-				setCache(cache,j,getCache(cache,j+1));
-				getCache(cache,j+1);
-				setCache(cache,j+1,temp);
+		for (int j=0; j<memSize-i-1; j++) {
+			if ( rdyCache(cache,j) > rdyCache(cache,j+1) ) {
+				temp = rdyCache(cache,j);
+				rdyCache(cache,j);
+				wrtCache(cache,j,rdyCache(cache,j+1));
+				rdyCache(cache,j+1);
+				wrtCache(cache,j+1,temp);
 			}
 		}
 	}
+	gettimeofday(&tv2,NULL);
 }

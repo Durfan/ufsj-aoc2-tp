@@ -3,9 +3,8 @@
 
 cache_t *iniCache();
 void cacheHit(opcao_t opt);
-void rstCache(cache_t *cache);
-int  getCache(cache_t *cache, int memAddr);
-void setCache(cache_t *cache, int memAddr, int value);
+int  rdyCache(cache_t *cache, int addr);
+void wrtCache(cache_t *cache, int addr, int value);
 void prtCache(cache_t *cache);
 
 void freedooooom(cache_t *cache);
