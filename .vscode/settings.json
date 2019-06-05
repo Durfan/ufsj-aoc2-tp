@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "main.h": "c",
-        "cmath": "c",
-        "config.h": "c"
-    }
-}
