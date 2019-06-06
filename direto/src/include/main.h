@@ -1,6 +1,15 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+#define cRED  "\x1b[31m"
+#define cGREN "\x1b[32m"
+#define cYELL "\x1b[33m"
+#define cBLUE "\x1b[36m"
+#define cRSET "\x1b[0m"
+
+#define seedArq "/dev/urandom"
+#define memSize 4096
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,16 +18,14 @@
 #include <assert.h>
 
 #include "config.h"
-#include "dmCache.h"
-#include "ordena.h"
-#include "gnuplot.h"
-
-#define seedArq "/dev/urandom"
-#define memSize 4096
+#include "cache.h"
+#include "algoritimos.h"
+#include "valida.h"
 
 int memory[memSize];
 int memBCK[memSize];
 config_t config;
 struct timeval tv1, tv2;
+char *resultfile;
 
 #endif //MAIN_H

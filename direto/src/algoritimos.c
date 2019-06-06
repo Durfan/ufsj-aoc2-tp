@@ -1,9 +1,8 @@
-#include "main.h"
+#include "./include/main.h"
 
 
 int partition(cache_t *cache, int start, int end) {
-	int pivot, pindex;
-	int temp;
+	int pivot, pindex, temp;
 	pivot = rdyCache(cache,end);
 	pindex = start;
 
@@ -55,7 +54,6 @@ void selection(cache_t *cache) {
 }
 
 void bubbleSrt(cache_t *cache) {
-	gettimeofday(&tv1,NULL);
 	int temp;
 	
 	for (int i=0; i<memSize; i++) {
@@ -69,5 +67,37 @@ void bubbleSrt(cache_t *cache) {
 			}
 		}
 	}
-	gettimeofday(&tv2,NULL);
+}
+
+void swap(int *p, int *q) {
+	int temp;
+	temp = *p;
+	*p = *q;
+	*q = temp;
+}
+
+int part(int *vetor, int start, int end) {
+	int pivot, pindex;
+	pivot = vetor[end];
+	pindex = start;
+
+	for (int i=start; i<end; i++) {
+		if ( vetor[i] <= pivot ) {
+			swap(vetor+i,vetor+pindex);;
+			pindex++;
+		}
+	}
+	swap(vetor+pindex,vetor+end);
+	
+	return pindex;
+}
+
+void sort(int *vetor, int start, int end) {
+	int pindex;
+
+	if ( start < end ) {
+		pindex = part(vetor,start,end);
+		sort(vetor,start,pindex-1);
+		sort(vetor,pindex+1,end);
+	}
 }
