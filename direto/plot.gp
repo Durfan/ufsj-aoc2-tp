@@ -1,13 +1,19 @@
+#!/usr/bin/gnuplot
+
+set term svg
+set output "quicksort.svg"
+
 set title "Cache Simulator"
-set xlabel "Cache Size"
+set xlabel "Palavras por Bloco"
 set ylabel "Cache Hit"
-set key right bottom
-set xrange [0:100]
-set yrange [0:100]
-set y2range [0:100]
-set autoscale y2
+
+set xrange [0:33]
+set autoscale y
+
+set xtics ("1" 1, "2" 2, "4" 4, "8" 8, "16" 16, "32" 32)
 set grid ytics lc rgb "#bbbbbb" lw 1 lt 0
 set grid xtics lc rgb "#bbbbbb" lw 1 lt 0
-set xtics ("0" 0, "16" 16, "32" 32, "64" 64, "128" 128, "256" 256, "512" 512)
 
-plot for [col=1:10:2] 'quicksort.dat' using col smooth bezier
+set key autotitle columnheader bottom right
+
+plot for [i=0:5] 'quicksort.dat' u 1:2 index i t columnhead(1) smooth bezier

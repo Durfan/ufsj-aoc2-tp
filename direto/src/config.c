@@ -107,12 +107,12 @@ void saveResult(float hit, float miss) {
     assert(fp);
 
     if ( config.bloco == 1 )
-        fprintf(fp, "%d", config.words);
+        fprintf(fp, "\"%dB\"\n", config.words*4);
 
-    fprintf(fp, " %05.2f %05.2f", hit, miss);
+    fprintf(fp, "%d %05.2f %05.2f\n", config.bloco, hit, miss);
 
     if ( (config.words == config.bloco) || (config.bloco == 32) )
-        fprintf(fp, "\n");
+        fprintf(fp, "\n\n");
 
     fclose(fp);
 }
