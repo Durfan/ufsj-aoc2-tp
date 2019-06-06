@@ -97,13 +97,23 @@ double ftempo(struct timeval tv1, struct timeval tv2) {
 }
 
 void createFile() {
-    FILE *fp = fopen(resultfile, "w");
+	char output[0x100];
+	struct stat st = {0};
+
+	if (stat("./output", &st) == -1) {
+		mkdir("./output", 0700);
+	}
+	
+    snprintf(output, sizeof(output),"./output/%s", resultfile);
+    FILE *fp = fopen(output, "w");
     assert(fp);
     fclose(fp);
 }
 
 void saveResult(float hit, float miss) {
-    FILE *fp = fopen(resultfile, "a");
+	char output[0x100];
+    snprintf(output, sizeof(output),"./output/%s", resultfile);
+    FILE *fp = fopen(output, "a");
     assert(fp);
 
     if ( config.bloco == 1 )
