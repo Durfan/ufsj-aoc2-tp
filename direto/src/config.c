@@ -119,7 +119,7 @@ void saveResult(float hit, float miss) {
     if ( config.bloco == 1 )
         fprintf(fp, "\"%dB\"\n", config.words*4);
 
-    fprintf(fp, "%d %05.2f %05.2f\n", config.bloco, hit, miss);
+    fprintf(fp, "%d %d %05.2f %05.2f\n", config.words, config.bloco, hit, miss);
 
     if ( (config.words == config.bloco) || (config.bloco == 32) )
         fprintf(fp, "\n\n");
