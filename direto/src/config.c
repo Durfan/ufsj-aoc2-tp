@@ -28,21 +28,13 @@ void setMEM(opcao_t opt) {
 }
 
 void divMEM() {
-	int size = memSize/3;
-	int vetor1[size];
-	int vetor2[size];
-	int vetor3[size];
+	int divsize = memSize/4;
 
-	for (int i=0; i<size; i++) {
-		vetor1[i] = i;
-		vetor2[i] = i;
-		vetor3[i] = i;
+	for (int i=0; i<memSize; i++) {
+		if ( i < divsize )   memory[i] = -1;
+		if ( i > divsize*2 ) memory[i] =  1;
+		if ( i > divsize*3 ) memory[i] = 42;	
 	}
-
-	memcpy(&memory[0],vetor1,size*sizeof(int));
-	memcpy(&memory[memSize/3],vetor2,size*sizeof(int));
-	memcpy(&memory[(memSize/3)*2],vetor3,size*sizeof(int));
-	memory[memSize-1] = 42;
 }
 
 void prtMEM() {

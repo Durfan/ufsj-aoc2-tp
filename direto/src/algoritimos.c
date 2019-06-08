@@ -69,6 +69,21 @@ void bubbleSrt(cache_t *cache) {
 	}
 }
 
+void somavetor(cache_t *cache) {
+	int divsize = memSize/4;
+	int *vetor1 = &memory[0];
+	int *vetor2 = &memory[divsize];
+	int *vetor3 = &memory[divsize*2];
+
+	for (int i=0; i<divsize; i++) {
+		rdyCache(cache,vetor3);
+		wrtCache(cache,vetor3,rdyCache(cache,vetor1)+rdyCache(cache,vetor2));
+		vetor1++;
+		vetor2++;
+		vetor3++;
+	}
+}
+
 void swap(int *p, int *q) {
 	int temp;
 	temp = *p;
