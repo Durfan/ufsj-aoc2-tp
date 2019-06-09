@@ -3,6 +3,7 @@
 
 void valida();
 void isSorted();
+void validasoma();
 void debugSRTmem();
 void debugPRTmem();
 

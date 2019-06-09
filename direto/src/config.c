@@ -19,6 +19,10 @@ void setMEM(opcao_t opt) {
 			getMEM();
             memcpy(memBCK,memory,sizeof(memory));
 			break;
+		case soma:
+			divMEM();
+            memcpy(memBCK,memory,sizeof(memory));
+			break;
 		case restore:
             memcpy(memory,memBCK,sizeof(memBCK));
 			break;
@@ -31,9 +35,8 @@ void divMEM() {
 	int divsize = memSize/4;
 
 	for (int i=0; i<memSize; i++) {
-		if ( i < divsize )   memory[i] = -1;
-		if ( i > divsize*2 ) memory[i] =  1;
-		if ( i > divsize*3 ) memory[i] = 42;	
+		if ( i < divsize ) memory[i] = -1;
+		else memory[i] = 1;
 	}
 }
 
@@ -59,7 +62,6 @@ void iterConfig() {
 		config.words *= 2;
 		config.bloco = 1;
 	}
-	setMEM(restore);
 }
 
 bool configs() {

@@ -12,7 +12,7 @@ int main(void) {
 	system("clear");
     printf(" SIMCACHE AOCII/TP1 -------------- [MEMORY %luB]\n", sizeof(memory));
 	
-	printf("\n QuickSort ---------------------------------------\n");
+	printf("\n QuickSort ----------------------------------------\n");
 	resultfile = "quicksort.dat";
 	createFile();
 
@@ -33,10 +33,11 @@ int main(void) {
 
 		cacheHit(print);
 		freedooooom(cache);
+		setMEM(restore);
 		iterConfig();
 	} while ( configs() );
 
-	printf("\n Selection ---------------------------------------\n");
+	printf("\n Selection ----------------------------------------\n");
 	resultfile = "selection.dat";
 	createFile();
 
@@ -57,6 +58,7 @@ int main(void) {
 		
 		cacheHit(print);
 		freedooooom(cache);
+		setMEM(restore);
 		iterConfig();
 	} while ( configs() );
 
@@ -81,6 +83,33 @@ int main(void) {
 
 		cacheHit(print);
 		freedooooom(cache);
+		setMEM(restore);
+		iterConfig();
+	} while ( configs() );
+
+	setMEM(soma);
+
+	printf("\n Soma Vetor ---------------------------------------\n");
+	resultfile = "somavetor.dat";
+	createFile();
+
+	do {
+		cache = iniCache(config);
+		cachesize = sizeof(*cache->data)*config.words;
+		printf(" %4luB %3d:%02d ", cachesize, config.words, config.bloco);
+
+		validasoma();
+		printf("\u2192");
+
+		gettimeofday(&tv1,NULL);		
+		somavetor(cache);
+		gettimeofday(&tv2,NULL);
+
+		validasoma();
+
+		cacheHit(print);
+		freedooooom(cache);
+		setMEM(restore);
 		iterConfig();
 	} while ( configs() );
 

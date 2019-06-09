@@ -1,7 +1,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-typedef enum {create,miss,hit,print,restore,reset} opcao_t;
+typedef enum {create,miss,hit,print,restore,reset,soma} opcao_t;
 
 typedef struct config {
 	int words;	// 16, 32, 64, 128, 256 e 512 words

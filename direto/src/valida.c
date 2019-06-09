@@ -32,6 +32,18 @@ void isSorted() {
 		printf(cRED"\u25A6"cRSET);
 }
 
+void validasoma() {
+	int divsize = memSize/4;
+	bool ok = true;
+
+	for (int i=divsize*2; i<divsize*3; i++) {
+		if ( memory[i] != 0 ) ok = false;
+	}
+
+    if ( ok ) printf(cGREN" \u25CF"cRSET);
+    else printf(cRED" \u25CF"cRSET);
+}
+
 void debugSRTmem() {
 	for (int i=0; i<memSize; i++)
 		memory[i] = memSize-i;

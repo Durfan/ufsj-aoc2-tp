@@ -33,8 +33,8 @@ void cacheHit(opcao_t opt) {
 			hitrate  = ((float)Hit/((float)Miss+(float)Hit))*100;
 			missrate = 100 - hitrate;
 			printf(" %.4fs \u258F", ftempo(tv1,tv2));
-			printf("HIT [%05.2f] %8d \u258F", hitrate, Hit);
-			printf("MISS [%05.2f] %8d \u258F\n", missrate, Miss);
+			printf("HIT [%6.2f] %8d \u258F", hitrate, Hit);
+			printf("MISS [%6.2f] %8d \u258F\n", missrate, Miss);
 			saveResult(hitrate,missrate);
 			Hit  = 0;
 			Miss = 0;

@@ -72,14 +72,14 @@ void bubbleSrt(cache_t *cache) {
 void somavetor(cache_t *cache) {
 	int divsize = memSize/4;
 	int addrV1 = 0;
-	int addrV2 = divsize;
-	int addrV3 = divsize*2;
+	int addrV2 = divsize; // 1024
+	int addrV3 = divsize*2; // 2048
 
 	for (int i=0; i<divsize; i++) {
 		rdyCache(cache,addrV3);
 		wrtCache(cache,addrV3,rdyCache(cache,addrV1)+rdyCache(cache,addrV2));
 		addrV1++;
-		addrV1++;
+		addrV2++;
 		addrV3++;
 	}
 }
