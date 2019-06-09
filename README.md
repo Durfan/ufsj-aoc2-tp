@@ -1,5 +1,4 @@
-# Arquitetura e Organização de Computadores 2
-## Primeiro Trabalho Prático - 2019.1 / Simulador de Cache
+## AOCII Primeiro Trabalho Prático - 2019.1 / Simulador de Cache
 [![CodeFactor](https://www.codefactor.io/repository/github/durfan/ufsj-aoc2-tp1/badge)](https://www.codefactor.io/repository/github/durfan/ufsj-aoc2-tp1)
 
 ![](./direto/output/quicksort_hit.svg)
