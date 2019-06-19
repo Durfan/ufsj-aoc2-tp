@@ -3,28 +3,28 @@
 
 void getMEM() {
 	FILE *fp = fopen(seedArq,"r");
-    if (fp == NULL) exit(1);
+	if (fp == NULL) exit(1);
 
 	for (int i=0; i<memSize; i++) {
 		fgets((char*)&memory[i], 4, fp);
 	}
 
-    fclose(fp);
+	fclose(fp);
 }
 
 void setMEM(opcao_t opt) {
 
-    switch (opt) {
+	switch (opt) {
 		case create:
 			getMEM();
-            memcpy(memBCK,memory,sizeof(memory));
+			memcpy(memBCK,memory,sizeof(memory));
 			break;
 		case soma:
 			divMEM();
-            memcpy(memBCK,memory,sizeof(memory));
+			memcpy(memBCK,memory,sizeof(memory));
 			break;
 		case restore:
-            memcpy(memory,memBCK,sizeof(memBCK));
+			memcpy(memory,memBCK,sizeof(memBCK));
 			break;
 		default:
 			exit(1);
@@ -41,16 +41,16 @@ void divMEM() {
 }
 
 void prtMEM() {
-    int line = 0;
+	int line = 0;
 
 	printf("\n\n");
 	for (int i=0; i<memSize; i++) {
-        printf(" %06X", memory[i]);
-        line++;
-        if (line > 10) {
-            line = 0;
-            printf("\n");
-        }
+		printf(" %06X", memory[i]);
+		line++;
+		if (line > 10) {
+			line = 0;
+			printf("\n");
+		}
 	}
 	printf("\n\n");
 }
@@ -86,8 +86,8 @@ int crapLog2foo(int x) {
 }
 
 double ftempo(struct timeval tv1, struct timeval tv2) {
-    return (double)(tv2.tv_usec - tv1.tv_usec)/1000000 +
-           (double)(tv2.tv_sec-tv1.tv_sec);
+	return (double)(tv2.tv_usec - tv1.tv_usec)/1000000 +
+		   (double)(tv2.tv_sec-tv1.tv_sec);
 }
 
 void createFile() {
@@ -98,25 +98,25 @@ void createFile() {
 		mkdir("./output", 0700);
 	}
 	
-    snprintf(output, sizeof(output),"./output/%s", resultfile);
-    FILE *fp = fopen(output, "w");
-    assert(fp);
-    fclose(fp);
+	snprintf(output, sizeof(output),"./output/%s", resultfile);
+	FILE *fp = fopen(output, "w");
+	assert(fp);
+	fclose(fp);
 }
 
 void saveResult(float hit, float miss) {
 	char output[0x100];
-    snprintf(output, sizeof(output),"./output/%s", resultfile);
-    FILE *fp = fopen(output, "a");
-    assert(fp);
+	snprintf(output, sizeof(output),"./output/%s", resultfile);
+	FILE *fp = fopen(output, "a");
+	assert(fp);
 
-    if ( config.bloco == 1 )
-        fprintf(fp, "\"%dB\"\n", config.words*4);
+	if ( config.bloco == 1 )
+		fprintf(fp, "\"%dB\"\n", config.words*4);
 
-    fprintf(fp, "%d %d %05.2f %05.2f\n", config.words, config.bloco, hit, miss);
+	fprintf(fp, "%d %d %05.2f %05.2f\n", config.words, config.bloco, hit, miss);
 
-    if ( (config.words == config.bloco) || (config.bloco == 32) )
-        fprintf(fp, "\n\n");
+	if ( (config.words == config.bloco) || (config.bloco == 32) )
+		fprintf(fp, "\n\n");
 
-    fclose(fp);
+	fclose(fp);
 }

@@ -10,7 +10,7 @@ int main(void) {
 	long cachesize;
 
 	system("clear");
-    printf(" SIMCACHE AOCII/TP1 -------------- [MEMORY %luB]\n", sizeof(memory));
+	printf(" SIMCACHE AOCII/TP1 -------------- [MEMORY %luB]\n", sizeof(memory));
 	
 	printf("\n QuickSort ----------------------------------------\n");
 	resultfile = "quicksort.dat";

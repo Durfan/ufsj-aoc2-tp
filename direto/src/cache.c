@@ -4,18 +4,18 @@
 cache_t *iniCache() {
 	config.sets = config.words/config.bloco;
 	config.log2bl = crapLog2foo(config.bloco);
-    cache_t *cache = malloc(config.sets*sizeof(cache_t));
-    assert(cache);
+	cache_t *cache = malloc(config.sets*sizeof(cache_t));
+	assert(cache);
 
-    for (int i=0; i<config.sets; i++) {
+	for (int i=0; i<config.sets; i++) {
 		cache[i].Vbit  = false;
 		cache[i].Dbit  = false;
 		cache[i].tag  = -1;
 		cache[i].data = malloc(config.bloco*sizeof(int));
 		assert(cache[i].data);
-    }
+	}
 
-    return cache;
+	return cache;
 }
 
 void cacheHit(opcao_t opt) {
@@ -91,7 +91,7 @@ void prtCache(cache_t *cache) {
 
 void freedooooom(cache_t *cache) {
 	for (int i=0; i<config.sets; i++) {
-        free(cache[i].data);
+		free(cache[i].data);
 	}
 	free(cache);
 }

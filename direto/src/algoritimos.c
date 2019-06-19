@@ -29,23 +29,23 @@ void quicksort(cache_t *cache, int start, int end) {
 	int pindex;
 
 	if ( start < end ) {
-        pindex = partition(cache,start,end);
-        quicksort(cache,start,pindex-1);
-        quicksort(cache,pindex+1,end);
+		pindex = partition(cache,start,end);
+		quicksort(cache,start,pindex-1);
+		quicksort(cache,pindex+1,end);
 	}
 }
 
 void selection(cache_t *cache) {
 	int l,temp;
 
-    for (int k=0; k<memSize; k++) {
+	for (int k=0; k<memSize; k++) {
 		l = k;
 		for (int j=k; j<memSize; j++) {
 			if ( rdyCache(cache,j) < rdyCache(cache,l) ) {
 				l = j;
 			}
 		}
-        temp = rdyCache(cache,l);
+		temp = rdyCache(cache,l);
 		rdyCache(cache,l);
 		wrtCache(cache,l,rdyCache(cache,k));
 		rdyCache(cache,k);

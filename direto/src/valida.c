@@ -3,20 +3,20 @@
 
 void valida() {
 	if (!VALIDA) return;
-    bool valido = true;
-    int *vetor = malloc(memSize*sizeof(int));
-    memcpy(vetor,memBCK,sizeof(memBCK));
-    sort(vetor,0,memSize-1);
+	bool valido = true;
+	int *vetor = malloc(memSize*sizeof(int));
+	memcpy(vetor,memBCK,sizeof(memBCK));
+	sort(vetor,0,memSize-1);
 
-    for (int i=0; i<memSize; i++) {
-        if ( vetor[i] != memory[i] )
-            valido = false;
-    }
+	for (int i=0; i<memSize; i++) {
+		if ( vetor[i] != memory[i] )
+			valido = false;
+	}
 
-    if ( valido ) printf(cGREN" \u25CF"cRSET);
-    else printf(cRED" \u25CF"cRSET);
+	if ( valido ) printf(cGREN" \u25CF"cRSET);
+	else printf(cRED" \u25CF"cRSET);
 
-    free(vetor);
+	free(vetor);
 }
 
 void isSorted() {
@@ -43,8 +43,8 @@ void validasoma() {
 		if ( memory[i] != 0 ) ok = false;
 	}
 
-    if ( ok ) printf(cGREN" \u25CF"cRSET);
-    else printf(cRED" \u25CF"cRSET);
+	if ( ok ) printf(cGREN" \u25CF"cRSET);
+	else printf(cRED" \u25CF"cRSET);
 }
 
 void debugSRTmem() {
@@ -54,6 +54,6 @@ void debugSRTmem() {
 
 void debugPRTmem() {
 	for (int i=0; i<memSize; i++)
-        printf(" %04d:%04d", i, memory[i]);
+		printf(" %04d:%04d", i, memory[i]);
 	printf("\n\n");
 }
