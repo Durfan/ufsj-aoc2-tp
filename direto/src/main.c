@@ -11,6 +11,7 @@ int main(void) {
 
 	system("clear");
 	printf(" SIMCACHE AOCII/TP1 -------------- [MEMORY %luB]\n", sizeof(g_memory));
+	printf(" Mapeamento Direto\n");
 	
 	printf("\n QuickSort ----------------------------------------\n");
 	g_resultfile = "quicksort.dat";

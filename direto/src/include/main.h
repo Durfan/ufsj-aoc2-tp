@@ -8,7 +8,7 @@
 #define CRSET "\x1b[0m"
 
 #define SEEDARQ "/dev/urandom"
-#define VALIDA 1
+#define VALIDA 0
 #define MEMSIZE 4096
 
 #include <stdio.h>
@@ -18,7 +18,6 @@
 #include <assert.h>
 
 #include <sys/time.h>
-#include <sys/types.h>
 #include <sys/stat.h>
 
 #include "config.h"
