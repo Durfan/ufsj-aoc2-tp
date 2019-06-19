@@ -50,4 +50,3 @@ plot for [i=0:5] './output/bubblesort.dat' u 2:4 index i t columnhead(1) smooth 
 set title "Soma Vetores"
 set output "./output/somavetor_miss.svg"
 plot for [i=0:5] './output/somavetor.dat' u 2:4 index i t columnhead(1) smooth bezier
-
