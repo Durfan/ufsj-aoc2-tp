@@ -2,42 +2,42 @@
 
 
 cache_t *iniCache() {
-	config.sets = config.words/config.bloco;
-	config.log2bl = crapLog2foo(config.bloco);
-	cache_t *cache = malloc(config.sets*sizeof(cache_t));
-	assert(cache);
+	g_Config.sets = g_Config.words/g_Config.bloco;
+	g_Config.log2bl = crapLog2foo(g_Config.bloco);
+	cache_t *Cache = malloc(g_Config.sets*sizeof(cache_t));
+	assert(Cache);
 
-	for (int i=0; i<config.sets; i++) {
-		cache[i].Vbit  = false;
-		cache[i].Dbit  = false;
-		cache[i].tag  = -1;
-		cache[i].data = malloc(config.bloco*sizeof(int));
-		assert(cache[i].data);
+	for (int i=0; i<g_Config.sets; i++) {
+		Cache[i].vBit  = false;
+		Cache[i].dBit  = false;
+		Cache[i].tag  = -1;
+		Cache[i].data = malloc(g_Config.bloco*sizeof(int));
+		assert(Cache[i].data);
 	}
 
-	return cache;
+	return Cache;
 }
 
 void cacheHit(opcao_t opt) {
-	static unsigned Hit, Miss;
+	static unsigned hit, miss;
 	float hitrate, missrate;
 
 	switch (opt) {
-		case miss:
-			Miss++;
+		case erro:
+			miss++;
 		break;
-		case hit:
-			Hit++;
+		case acerto:
+			hit++;
 		break;
 		case print:
-			hitrate  = ((float)Hit/((float)Miss+(float)Hit))*100;
+			hitrate  = ((float)hit/((float)miss+(float)hit))*100;
 			missrate = 100 - hitrate;
 			printf(" %.4fs \u258F", ftempo(tv1,tv2));
-			printf("HIT [%6.2f] %8d \u258F", hitrate, Hit);
-			printf("MISS [%6.2f] %8d \u258F\n", missrate, Miss);
+			printf("HIT [%6.2f] %8d \u258F", hitrate, hit);
+			printf("MISS [%6.2f] %8d \u258F\n", missrate, miss);
 			saveResult(hitrate,missrate);
-			Hit  = 0;
-			Miss = 0;
+			hit  = 0;
+			miss = 0;
 		break;
 		default:
 			exit(1);
@@ -45,53 +45,53 @@ void cacheHit(opcao_t opt) {
 	}
 }
 
-int rdyCache(cache_t *cache, int addr) {
-	int tag = addr / config.words;
-	int map = addr % config.words;
-	int idx = map / config.bloco;
-	int oST = map % config.bloco;
+int rdyCache(cache_t *Cache, int addr) {
+	int tag = addr / g_Config.words;
+	int map = addr % g_Config.words;
+	int idx = map / g_Config.bloco;
+	int oST = map % g_Config.bloco;
 
-	if ( cache[idx].Vbit && tag == cache[idx].tag ) {
-		cacheHit(hit);
-		return cache[idx].data[oST];
+	if ( Cache[idx].vBit && tag == Cache[idx].tag ) {
+		cacheHit(acerto);
+		return Cache[idx].data[oST];
 	}
 
-	addr = addr >> config.log2bl;
-	addr = addr << config.log2bl;
+	addr = addr >> g_Config.log2bl;
+	addr = addr << g_Config.log2bl;
 
-	cacheHit(miss);
-	cache[idx].Vbit = true;
-	cache[idx].tag = tag;
-	memcpy(cache[idx].data,&memory[addr],config.bloco*sizeof(int));
+	cacheHit(erro);
+	Cache[idx].vBit = true;
+	Cache[idx].tag = tag;
+	memcpy(Cache[idx].data,&g_memory[addr],g_Config.bloco*sizeof(int));
 
-	return cache[idx].data[oST];
+	return Cache[idx].data[oST];
 }
 
-void wrtCache(cache_t *cache, int addr, int value) {
-	int tag = addr / config.words;
-	int map = addr % config.words;
-	int idx = map / config.bloco;
-	int oST = map % config.bloco;
+void wrtCache(cache_t *Cache, int addr, int value) {
+	int tag = addr / g_Config.words;
+	int map = addr % g_Config.words;
+	int idx = map / g_Config.bloco;
+	int oST = map % g_Config.bloco;
 
-	cache[idx].tag = tag;
-	cache[idx].data[oST] = value;
-	memory[addr] = value;
+	Cache[idx].tag = tag;
+	Cache[idx].data[oST] = value;
+	g_memory[addr] = value;
 }
 
-void prtCache(cache_t *cache) {
+void prtCache(cache_t *Cache) {
 	system("clear");
-	for (int i=0; i<config.sets; i++) {
-		printf(" %02X \u2192 %d %04d [", i, cache[i].Vbit, cache[i].tag);
-		for (int j=0; j<config.bloco; j++) {
-			printf(" %06X", cache[i].data[j]);
+	for (int i=0; i<g_Config.sets; i++) {
+		printf(" %02X \u2192 %d %04d [", i, Cache[i].vBit, Cache[i].tag);
+		for (int j=0; j<g_Config.bloco; j++) {
+			printf(" %06X", Cache[i].data[j]);
 		}
 		printf(" ]\n");
 	}
 }
 
-void freedooooom(cache_t *cache) {
-	for (int i=0; i<config.sets; i++) {
-		free(cache[i].data);
+void freedooooom(cache_t *Cache) {
+	for (int i=0; i<g_Config.sets; i++) {
+		free(Cache[i].data);
 	}
-	free(cache);
+	free(Cache);
 }

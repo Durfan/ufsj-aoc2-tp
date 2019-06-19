@@ -4,85 +4,85 @@
 int main(void) {
 
 	setMEM(create);
-	config.words = 16;
-	config.bloco = 1;
-	cache_t *cache;
+	g_Config.words = 16;
+	g_Config.bloco = 1;
+	cache_t *Cache;
 	long cachesize;
 
 	system("clear");
-	printf(" SIMCACHE AOCII/TP1 -------------- [MEMORY %luB]\n", sizeof(memory));
+	printf(" SIMCACHE AOCII/TP1 -------------- [MEMORY %luB]\n", sizeof(g_memory));
 	
 	printf("\n QuickSort ----------------------------------------\n");
-	resultfile = "quicksort.dat";
+	g_resultfile = "quicksort.dat";
 	createFile();
 
 	do {
-		cache = iniCache(config);
-		cachesize = sizeof(*cache->data)*config.words;
-		printf(" %4luB %3d:%02d ", cachesize, config.words, config.bloco);
+		Cache = iniCache(g_Config);
+		cachesize = sizeof(*Cache->data)*g_Config.words;
+		printf(" %4luB %3d:%02d ", cachesize, g_Config.words, g_Config.bloco);
 		
 		isSorted();
 		printf("\u2192");
 
 		gettimeofday(&tv1,NULL);
-		quicksort(cache,0,memSize-1);
+		quicksort(Cache,0,MEMSIZE-1);
 		gettimeofday(&tv2,NULL);
 		isSorted();
 
 		valida();
 
 		cacheHit(print);
-		freedooooom(cache);
+		freedooooom(Cache);
 		setMEM(restore);
 		iterConfig();
 	} while ( configs() );
 
 	printf("\n Selection ----------------------------------------\n");
-	resultfile = "selection.dat";
+	g_resultfile = "selection.dat";
 	createFile();
 
 	do {
-		cache = iniCache(config);
-		cachesize = sizeof(*cache->data)*config.words;
-		printf(" %4luB %3d:%02d ", cachesize, config.words, config.bloco);
+		Cache = iniCache(g_Config);
+		cachesize = sizeof(*Cache->data)*g_Config.words;
+		printf(" %4luB %3d:%02d ", cachesize, g_Config.words, g_Config.bloco);
 
 		isSorted();
 		printf("\u2192");
 
 		gettimeofday(&tv1,NULL);
-		selection(cache);
+		selection(Cache);
 		gettimeofday(&tv2,NULL);
 		isSorted();
 
 		valida();
 		
 		cacheHit(print);
-		freedooooom(cache);
+		freedooooom(Cache);
 		setMEM(restore);
 		iterConfig();
 	} while ( configs() );
 
 	printf("\n BubbleSort ---------------------------------------\n");
-	resultfile = "bubblesort.dat";
+	g_resultfile = "bubblesort.dat";
 	createFile();
 
 	do {
-		cache = iniCache(config);
-		cachesize = sizeof(*cache->data)*config.words;
-		printf(" %4luB %3d:%02d ", cachesize, config.words, config.bloco);
+		Cache = iniCache(g_Config);
+		cachesize = sizeof(*Cache->data)*g_Config.words;
+		printf(" %4luB %3d:%02d ", cachesize, g_Config.words, g_Config.bloco);
 
 		isSorted();
 		printf("\u2192");
 
 		gettimeofday(&tv1,NULL);		
-		bubbleSrt(cache);
+		bubbleSrt(Cache);
 		gettimeofday(&tv2,NULL);
 		isSorted();
 
 		valida();
 
 		cacheHit(print);
-		freedooooom(cache);
+		freedooooom(Cache);
 		setMEM(restore);
 		iterConfig();
 	} while ( configs() );
@@ -90,25 +90,25 @@ int main(void) {
 	setMEM(soma);
 
 	printf("\n Soma Vetor ---------------------------------------\n");
-	resultfile = "somavetor.dat";
+	g_resultfile = "somavetor.dat";
 	createFile();
 
 	do {
-		cache = iniCache(config);
-		cachesize = sizeof(*cache->data)*config.words;
-		printf(" %4luB %3d:%02d ", cachesize, config.words, config.bloco);
+		Cache = iniCache(g_Config);
+		cachesize = sizeof(*Cache->data)*g_Config.words;
+		printf(" %4luB %3d:%02d ", cachesize, g_Config.words, g_Config.bloco);
 
 		validasoma();
 		printf("\u2192");
 
 		gettimeofday(&tv1,NULL);		
-		somavetor(cache);
+		somavetor(Cache);
 		gettimeofday(&tv2,NULL);
 
 		validasoma();
 
 		cacheHit(print);
-		freedooooom(cache);
+		freedooooom(Cache);
 		setMEM(restore);
 		iterConfig();
 	} while ( configs() );

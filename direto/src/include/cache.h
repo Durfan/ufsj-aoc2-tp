@@ -3,10 +3,10 @@
 
 cache_t *iniCache();
 void cacheHit(opcao_t opt);
-int  rdyCache(cache_t *cache, int addr);
-void wrtCache(cache_t *cache, int addr, int value);
-void prtCache(cache_t *cache);
+int  rdyCache(cache_t *Cache, int addr);
+void wrtCache(cache_t *Cache, int addr, int value);
+void prtCache(cache_t *Cache);
 
-void freedooooom(cache_t *cache);
+void freedooooom(cache_t *Cache);
 
 #endif //CACHE_H

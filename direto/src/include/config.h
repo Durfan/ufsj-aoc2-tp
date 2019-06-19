@@ -1,18 +1,18 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-typedef enum {create,miss,hit,print,restore,reset,soma} opcao_t;
+typedef enum opcao {create,erro,acerto,print,restore,reset,soma} opcao_t;
 
-typedef struct config {
+typedef struct Config {
 	int words;	// 16, 32, 64, 128, 256 e 512 words
 	int bloco;	// 1, 2, 4, 8, 16 e 32 words por bloco
 	int sets;
 	int log2bl;
 } config_t;
 
-typedef struct cache {
-	bool Vbit;
-	bool Dbit;
+typedef struct Cache {
+	bool vBit;
+	bool dBit;
 	int tag;
 	int *data;
 } cache_t;
@@ -28,6 +28,6 @@ int crapLog2foo(int x);
 double ftempo(struct timeval tv1, struct timeval tv2);
 
 void createFile();
-void saveResult(float hit, float miss);
+void saveResult(float hitrate, float missrate);
 
 #endif //CONFIG_H

@@ -2,11 +2,11 @@
 
 
 void getMEM() {
-	FILE *fp = fopen(seedArq,"r");
+	FILE *fp = fopen(SEEDARQ,"r");
 	if (fp == NULL) exit(1);
 
-	for (int i=0; i<memSize; i++) {
-		fgets((char*)&memory[i], 4, fp);
+	for (int i=0; i<MEMSIZE; i++) {
+		fgets((char*)&g_memory[i], 4, fp);
 	}
 
 	fclose(fp);
@@ -17,14 +17,14 @@ void setMEM(opcao_t opt) {
 	switch (opt) {
 		case create:
 			getMEM();
-			memcpy(memBCK,memory,sizeof(memory));
+			memcpy(g_memBCK,g_memory,sizeof(g_memory));
 			break;
 		case soma:
 			divMEM();
-			memcpy(memBCK,memory,sizeof(memory));
+			memcpy(g_memBCK,g_memory,sizeof(g_memory));
 			break;
 		case restore:
-			memcpy(memory,memBCK,sizeof(memBCK));
+			memcpy(g_memory,g_memBCK,sizeof(g_memBCK));
 			break;
 		default:
 			exit(1);
@@ -32,11 +32,11 @@ void setMEM(opcao_t opt) {
 }
 
 void divMEM() {
-	int divsize = memSize/4;
+	int divsize = MEMSIZE/4;
 
-	for (int i=0; i<memSize; i++) {
-		if ( i < divsize ) memory[i] = -1;
-		else memory[i] = 1;
+	for (int i=0; i<MEMSIZE; i++) {
+		if ( i < divsize ) g_memory[i] = -1;
+		else g_memory[i] = 1;
 	}
 }
 
@@ -44,8 +44,8 @@ void prtMEM() {
 	int line = 0;
 
 	printf("\n\n");
-	for (int i=0; i<memSize; i++) {
-		printf(" %06X", memory[i]);
+	for (int i=0; i<MEMSIZE; i++) {
+		printf(" %06X", g_memory[i]);
 		line++;
 		if (line > 10) {
 			line = 0;
@@ -56,20 +56,20 @@ void prtMEM() {
 }
 
 void iterConfig() {
-	if ( config.bloco < 32 && config.bloco < config.words)
-		config.bloco *= 2;
+	if ( g_Config.bloco < 32 && g_Config.bloco < g_Config.words)
+		g_Config.bloco *= 2;
 	else {
-		config.words *= 2;
-		config.bloco = 1;
+		g_Config.words *= 2;
+		g_Config.bloco = 1;
 	}
 }
 
 bool configs() {
-	if ( config.words <= 512 ) {
+	if ( g_Config.words <= 512 ) {
 		return true;
 	}
-	config.words = 16;
-	config.bloco = 1;
+	g_Config.words = 16;
+	g_Config.bloco = 1;
 	return false;
 }
 
@@ -98,24 +98,24 @@ void createFile() {
 		mkdir("./output", 0700);
 	}
 	
-	snprintf(output, sizeof(output),"./output/%s", resultfile);
+	snprintf(output, sizeof(output),"./output/%s", g_resultfile);
 	FILE *fp = fopen(output, "w");
 	assert(fp);
 	fclose(fp);
 }
 
-void saveResult(float hit, float miss) {
+void saveResult(float hitrate, float missrate) {
 	char output[0x100];
-	snprintf(output, sizeof(output),"./output/%s", resultfile);
+	snprintf(output, sizeof(output),"./output/%s", g_resultfile);
 	FILE *fp = fopen(output, "a");
 	assert(fp);
 
-	if ( config.bloco == 1 )
-		fprintf(fp, "\"%dB\"\n", config.words*4);
+	if ( g_Config.bloco == 1 )
+		fprintf(fp, "\"%dB\"\n", g_Config.words*4);
 
-	fprintf(fp, "%d %d %05.2f %05.2f\n", config.words, config.bloco, hit, miss);
+	fprintf(fp, "%d %d %05.2f %05.2f\n", g_Config.words, g_Config.bloco, hitrate, missrate);
 
-	if ( (config.words == config.bloco) || (config.bloco == 32) )
+	if ( (g_Config.words == g_Config.bloco) || (g_Config.bloco == 32) )
 		fprintf(fp, "\n\n");
 
 	fclose(fp);
