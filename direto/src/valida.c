@@ -2,6 +2,7 @@
 
 
 void valida() {
+	if (!VALIDA) return;
     bool valido = true;
     int *vetor = malloc(memSize*sizeof(int));
     memcpy(vetor,memBCK,sizeof(memBCK));
@@ -19,6 +20,7 @@ void valida() {
 }
 
 void isSorted() {
+	if (!VALIDA) return;
 	bool sorted = true;
 
 	for (int i=0; i<memSize-1; i++) {
@@ -33,6 +35,7 @@ void isSorted() {
 }
 
 void validasoma() {
+	if (!VALIDA) return;
 	int divsize = memSize/4;
 	bool ok = true;
 

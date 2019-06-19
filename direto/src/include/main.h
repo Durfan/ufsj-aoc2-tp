@@ -8,6 +8,7 @@
 #define cRSET "\x1b[0m"
 
 #define seedArq "/dev/urandom"
+#define VALIDA 1
 #define memSize 4096
 
 #include <stdio.h>
