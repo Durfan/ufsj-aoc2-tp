@@ -2,12 +2,14 @@
 
 
 cache_t *iniCache() {
+	g_Config.sets = g_Config.words/g_Config.bloco;
 	g_Config.log2bl = crapLog2foo(g_Config.bloco);
-	cache_t *Cache = malloc(g_Config.words*sizeof(cache_t));
+	cache_t *Cache = malloc(g_Config.sets*sizeof(cache_t));
 	assert(Cache);
 
-	for (int i=0; i<g_Config.words; i++) {
+	for (int i=0; i<g_Config.sets; i++) {
 		Cache[i].tag  = -1;
+		Cache[i].lru  = 0;
 		Cache[i].data = malloc(g_Config.bloco*sizeof(int));
 		assert(Cache[i].data);
 	}
@@ -43,34 +45,62 @@ void cacheHit(opcao_t opt) {
 }
 
 int rdyCache(cache_t *Cache, int addr) {
-	int tag = addr / g_Config.words;
-	int map = addr % g_Config.words;
-	int idx = map / g_Config.bloco;
-	int oST = map % g_Config.bloco;
+	int tag = addr / g_Config.vias;
+	int cjt = addr % g_Config.vias;
+	int oST = tag % g_Config.bloco;
+	bool inCache = false;
+	int maxLRU = 0;
+	int dataSB;
+	int data;
 
-	if ( tag == Cache[idx].tag ) {
-		cacheHit(acerto);
-		return Cache[idx].data[oST];
+	int start = cjt*(g_Config.words/g_Config.vias);
+	int end = start+(g_Config.words/g_Config.vias);
+
+	for (int i=start; i<end; i++) {
+		if ( tag == Cache[i].tag ) {
+			cacheHit(acerto);
+			inCache = true;
+			Cache[i].lru = 0;
+			data = Cache[i].data[oST];
+		}
+		else {
+			Cache[i].lru++;
+		}
+		if (Cache[i].lru > maxLRU) {
+			maxLRU = Cache[i].lru;
+			dataSB = i;
+		}
 	}
 
+	if (inCache)
+		return data;
+
+	cacheHit(erro);
 	addr = addr >> g_Config.log2bl;
 	addr = addr << g_Config.log2bl;
 
-	cacheHit(erro);
-	Cache[idx].tag = tag;
-	memcpy(Cache[idx].data,&g_memory[addr],g_Config.bloco*sizeof(int));
-
-	return Cache[idx].data[oST];
+	switch (g_Config.politica) {
+		case lru:
+			Cache[dataSB].tag = tag;
+			memcpy(Cache[dataSB].data,&g_memory[addr],g_Config.bloco*sizeof(int));
+			return Cache[dataSB].data[oST];
+		case lfu:
+			break;
+		case fifo:
+			break;
+		default:
+			exit(1);
+	}
+	
 }
 
 void wrtCache(cache_t *Cache, int addr, int value) {
-	int tag = addr / g_Config.words;
-	int map = addr % g_Config.words;
-	int idx = map / g_Config.bloco;
-	int oST = map % g_Config.bloco;
+	int tag = addr / g_Config.vias;
+	int cjt = addr % g_Config.vias;
+	int oST = tag % g_Config.bloco;
 
-	Cache[idx].tag = tag;
-	Cache[idx].data[oST] = value;
+	Cache[cjt*g_Config.vias].tag = tag;
+	Cache[cjt*g_Config.vias].data[oST] = value;
 	g_memory[addr] = value;
 }
 

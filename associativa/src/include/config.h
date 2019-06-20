@@ -2,16 +2,20 @@
 #define CONFIG_H
 
 typedef enum opcao {create,erro,acerto,print,restore,reset,soma} opcao_t;
+typedef enum polit {lru,lfu,fifo} polSub_t;
 
 typedef struct Config {
+	polSub_t politica;
 	int words;	// 16, 32, 64, 128, 256 e 512 words
 	int bloco;	// 1, 2, 4, 8, 16 e 32 words por bloco
 	int vias;	// 2 vias, 4 vias e 8 vias
+	int sets;
 	int log2bl;
 } config_t;
 
 typedef struct Cache {
 	int tag;
+	int lru;
 	int *data;
 } cache_t;
 

@@ -22,6 +22,8 @@
 
 #include "config.h"
 #include "cache.h"
+#include "algoritimos.h"
+#include "valida.h"
 
 int g_memory[MEMSIZE];
 int g_memBCK[MEMSIZE];
