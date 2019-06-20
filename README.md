@@ -4,8 +4,7 @@
 ![](./direto/output/quicksort_hit.svg)
 
 * Mapeamento direto: folder 'direto'
-* Associativo por conjunto: folder 'conjunto'
-* Totalmente associativo: folder 'totalmente'
+* Associativo por conjunto: folder 'associativa'
 
 
 Comandos de execução:
