@@ -99,9 +99,18 @@ void wrtCache(cache_t *Cache, int addr, int value) {
 	int cjt = addr % g_Config.vias;
 	int oST = tag % g_Config.bloco;
 
-	Cache[cjt*g_Config.vias].tag = tag;
-	Cache[cjt*g_Config.vias].data[oST] = value;
-	g_memory[addr] = value;
+	int start = cjt*(g_Config.words/g_Config.vias);
+	int end = start+(g_Config.words/g_Config.vias);
+
+	for (int i=start; i<end; i++) {
+		if ( tag == Cache[i].tag ) {
+			Cache[i].tag = tag;
+			Cache[i].data[oST] = value;
+			g_memory[addr] = value;
+		}
+	}
+
+
 }
 
 void prtCache(cache_t *Cache) {
