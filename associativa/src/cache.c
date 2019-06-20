@@ -2,14 +2,11 @@
 
 
 cache_t *iniCache() {
-	g_Config.sets = g_Config.words/g_Config.bloco;
 	g_Config.log2bl = crapLog2foo(g_Config.bloco);
-	cache_t *Cache = malloc(g_Config.sets*sizeof(cache_t));
+	cache_t *Cache = malloc(g_Config.words*sizeof(cache_t));
 	assert(Cache);
 
-	for (int i=0; i<g_Config.sets; i++) {
-		Cache[i].vBit  = false;
-		Cache[i].dBit  = false;
+	for (int i=0; i<g_Config.words; i++) {
 		Cache[i].tag  = -1;
 		Cache[i].data = malloc(g_Config.bloco*sizeof(int));
 		assert(Cache[i].data);
@@ -51,7 +48,7 @@ int rdyCache(cache_t *Cache, int addr) {
 	int idx = map / g_Config.bloco;
 	int oST = map % g_Config.bloco;
 
-	if ( Cache[idx].vBit && tag == Cache[idx].tag ) {
+	if ( tag == Cache[idx].tag ) {
 		cacheHit(acerto);
 		return Cache[idx].data[oST];
 	}
@@ -60,7 +57,6 @@ int rdyCache(cache_t *Cache, int addr) {
 	addr = addr << g_Config.log2bl;
 
 	cacheHit(erro);
-	Cache[idx].vBit = true;
 	Cache[idx].tag = tag;
 	memcpy(Cache[idx].data,&g_memory[addr],g_Config.bloco*sizeof(int));
 
@@ -80,8 +76,8 @@ void wrtCache(cache_t *Cache, int addr, int value) {
 
 void prtCache(cache_t *Cache) {
 	system("clear");
-	for (int i=0; i<g_Config.sets; i++) {
-		printf(" %02X \u2192 %d %04d [", i, Cache[i].vBit, Cache[i].tag);
+	for (int i=0; i<g_Config.words; i++) {
+		printf(" %02X \u2192 %04d [", i, Cache[i].tag);
 		for (int j=0; j<g_Config.bloco; j++) {
 			printf(" %06X", Cache[i].data[j]);
 		}
@@ -90,7 +86,7 @@ void prtCache(cache_t *Cache) {
 }
 
 void freedooooom(cache_t *Cache) {
-	for (int i=0; i<g_Config.sets; i++) {
+	for (int i=0; i<g_Config.words; i++) {
 		free(Cache[i].data);
 	}
 	free(Cache);

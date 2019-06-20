@@ -6,6 +6,7 @@ int main(void) {
 	setMEM(create);
 	g_Config.words = 16;
 	g_Config.bloco = 1;
+	g_Config.bloco = 2;
 	cache_t *Cache;
 	long cachesize;
 
