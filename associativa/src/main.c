@@ -7,7 +7,7 @@ int main(void) {
 	debugSRTmem();
 	g_Config.words = 16;
 	g_Config.bloco = 1;
-	g_Config.vias  = 2;
+	g_Config.vias  = 8;
 	g_Config.politica = lru;
 	cache_t *Cache;
 	long cachesize;
@@ -21,7 +21,7 @@ int main(void) {
 	printf(" %4luB %3d:%02d \n\n", cachesize, g_Config.words, g_Config.bloco);
 
 	debugPRTmem();
-	bubbleSrt(Cache);
+	quicksort(Cache,0,MEMSIZE-1);
 	debugPRTmem();
 
 	freedooooom(Cache);

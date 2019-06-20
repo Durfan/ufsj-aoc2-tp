@@ -47,14 +47,14 @@ void cacheHit(opcao_t opt) {
 int rdyCache(cache_t *Cache, int addr) {
 	int tag = addr / g_Config.vias;
 	int cjt = addr % g_Config.vias;
-	int oST = tag % g_Config.bloco;
+	int oST = addr % g_Config.bloco;
 	bool inCache = false;
 	int maxLRU = 0;
 	int dataSB;
 	int data;
 
-	int start = cjt*(g_Config.words/g_Config.vias);
-	int end = start+(g_Config.words/g_Config.vias);
+	int start = cjt*(g_Config.sets/g_Config.vias);
+	int end = start+(g_Config.sets/g_Config.vias);
 
 	for (int i=start; i<end; i++) {
 		if ( tag == Cache[i].tag ) {
@@ -66,7 +66,7 @@ int rdyCache(cache_t *Cache, int addr) {
 		else {
 			Cache[i].lru++;
 		}
-		if (Cache[i].lru > maxLRU) {
+		if (Cache[i].lru >= maxLRU) {
 			maxLRU = Cache[i].lru;
 			dataSB = i;
 		}
@@ -91,7 +91,8 @@ int rdyCache(cache_t *Cache, int addr) {
 		default:
 			exit(1);
 	}
-	
+
+	return -1;
 }
 
 void wrtCache(cache_t *Cache, int addr, int value) {
@@ -99,8 +100,8 @@ void wrtCache(cache_t *Cache, int addr, int value) {
 	int cjt = addr % g_Config.vias;
 	int oST = tag % g_Config.bloco;
 
-	int start = cjt*(g_Config.words/g_Config.vias);
-	int end = start+(g_Config.words/g_Config.vias);
+	int start = cjt*(g_Config.sets/g_Config.vias);
+	int end = start+(g_Config.sets/g_Config.vias);
 
 	for (int i=start; i<end; i++) {
 		if ( tag == Cache[i].tag ) {
