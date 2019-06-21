@@ -14,5 +14,5 @@ Comandos de execução:
 ```bash
 make
 ./simcache
-gnuplot plot.gp -
+gnuplot plot.gp
 ```
