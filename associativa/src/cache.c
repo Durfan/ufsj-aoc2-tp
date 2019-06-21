@@ -39,19 +39,17 @@ void cacheHit(opcao_t opt) {
 			miss = 0;
 		break;
 		default:
-			exit(1);
-		break;
+		exit(1);
 	}
 }
 
 int rdyCache(cache_t *Cache, int addr) {
+	bool inCache = false;
 	int tag = addr / g_Config.vias;
 	int cjt = addr % g_Config.vias;
 	int oST = addr % g_Config.bloco;
-	bool inCache = false;
 	int maxLRU = 0;
-	int dataSB;
-	int data;
+	int data, dataSB;
 
 	int start = cjt*(g_Config.sets/g_Config.vias);
 	int end = start+(g_Config.sets/g_Config.vias);
@@ -66,52 +64,52 @@ int rdyCache(cache_t *Cache, int addr) {
 		else {
 			Cache[i].lru++;
 		}
-		if (Cache[i].lru >= maxLRU) {
+		if (Cache[i].lru > maxLRU || Cache[i].tag == -1) {
 			maxLRU = Cache[i].lru;
 			dataSB = i;
 		}
 	}
 
-	if (inCache)
-		return data;
-
-	cacheHit(erro);
-	addr = addr >> g_Config.log2bl;
-	addr = addr << g_Config.log2bl;
-
-	switch (g_Config.politica) {
-		case lru:
-			Cache[dataSB].tag = tag;
-			memcpy(Cache[dataSB].data,&g_memory[addr],g_Config.bloco*sizeof(int));
-			return Cache[dataSB].data[oST];
-		case lfu:
-			break;
-		case fifo:
-			break;
-		default:
-			exit(1);
+	if ( !inCache ) {
+		cacheHit(erro);
+		addr = addr >> g_Config.log2bl;
+		addr = addr << g_Config.log2bl;
+		switch (g_Config.politica) {
+			case lru:
+				Cache[dataSB].tag = tag;
+				Cache[dataSB].lru = 0;
+				memcpy(Cache[dataSB].data,&g_memory[addr],g_Config.bloco*sizeof(int));
+				return Cache[dataSB].data[oST];
+			case lfu:
+				break;
+			case fifo:
+				break;
+		}
 	}
 
-	return -1;
+	return data;
 }
 
 void wrtCache(cache_t *Cache, int addr, int value) {
+	bool inCache = false;
 	int tag = addr / g_Config.vias;
 	int cjt = addr % g_Config.vias;
-	int oST = tag % g_Config.bloco;
+	int oST = addr % g_Config.bloco;
 
 	int start = cjt*(g_Config.sets/g_Config.vias);
 	int end = start+(g_Config.sets/g_Config.vias);
 
 	for (int i=start; i<end; i++) {
 		if ( tag == Cache[i].tag ) {
+			inCache = true;
 			Cache[i].tag = tag;
+			Cache[i].lru = 0;
 			Cache[i].data[oST] = value;
 			g_memory[addr] = value;
 		}
 	}
 
-
+	assert(inCache);
 }
 
 void prtCache(cache_t *Cache) {
@@ -126,7 +124,7 @@ void prtCache(cache_t *Cache) {
 }
 
 void freedooooom(cache_t *Cache) {
-	for (int i=0; i<g_Config.words; i++) {
+	for (int i=0; i<g_Config.sets; i++) {
 		free(Cache[i].data);
 	}
 	free(Cache);
