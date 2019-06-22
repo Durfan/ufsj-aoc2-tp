@@ -1,6 +1,8 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+#define _GNU_SOURCE
+
 #define CRED  "\x1b[31m"
 #define CGREN "\x1b[32m"
 #define CYELL "\x1b[33m"

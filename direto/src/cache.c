@@ -25,10 +25,10 @@ void cacheHit(opcao_t opt) {
 	switch (opt) {
 		case erro:
 			miss++;
-		break;
+			break;
 		case acerto:
 			hit++;
-		break;
+			break;
 		case print:
 			hitrate  = ((float)hit/((float)miss+(float)hit))*100;
 			missrate = 100 - hitrate;
@@ -38,9 +38,9 @@ void cacheHit(opcao_t opt) {
 			saveResult(hitrate,missrate);
 			hit  = 0;
 			miss = 0;
-		break;
+			break;
 		default:
-		exit(1);
+			exit(1);
 	}
 }
 

@@ -24,22 +24,22 @@ void cacheHit(opcao_t opt) {
 	switch (opt) {
 		case erro:
 			miss++;
-		break;
+			break;
 		case acerto:
 			hit++;
-		break;
+			break;
 		case print:
 			hitrate  = ((float)hit/((float)miss+(float)hit))*100;
 			missrate = 100 - hitrate;
-			printf(" %.4fs \u258F", ftempo(tv1,tv2));
+			printf(" %7.4fs \u258F", ftempo(tv1,tv2));
 			printf("HIT [%6.2f] %8d \u258F", hitrate, hit);
 			printf("MISS [%6.2f] %8d \u258F\n", missrate, miss);
 			saveResult(hitrate,missrate);
 			hit  = 0;
 			miss = 0;
-		break;
+			break;
 		default:
-		exit(1);
+			exit(1);
 	}
 }
 
@@ -109,7 +109,7 @@ void wrtCache(cache_t *Cache, int addr, int value) {
 		}
 	}
 
-	assert(inCache);
+	//assert(inCache);
 }
 
 void prtCache(cache_t *Cache) {
