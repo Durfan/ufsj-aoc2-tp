@@ -8,8 +8,10 @@ cache_t *iniCache() {
 	assert(Cache);
 
 	for (int i=0; i<g_Config.sets; i++) {
+		Cache[i].vBit = false;
 		Cache[i].tag  = -1;
 		Cache[i].lru  = 0;
+		Cache[i].lfu  = 0;
 		Cache[i].data = malloc(g_Config.bloco*sizeof(int));
 		assert(Cache[i].data);
 	}
@@ -45,79 +47,81 @@ void cacheHit(opcao_t opt) {
 
 int rdyCache(cache_t *Cache, int addr) {
 	bool inCache = false;
-	int tag = addr / g_Config.vias;
-	int cjt = addr % g_Config.vias;
 	int oST = addr % g_Config.bloco;
-	int maxLRU = 0;
+    int cjt = (addr >> g_Config.log2bl) % g_Config.vias;
+	int tag = addr >> crapLog2foo(g_Config.vias) >> g_Config.log2bl;
 	int data, dataSB;
 
 	int start = cjt*(g_Config.sets/g_Config.vias);
-	int end = start+(g_Config.sets/g_Config.vias);
+	int end = start+(g_Config.sets/g_Config.vias)-1;
 
 	for (int i=start; i<end; i++) {
-		if ( tag == Cache[i].tag ) {
+		if ( Cache[i].vBit && tag == Cache[i].tag ) {
 			cacheHit(acerto);
 			inCache = true;
-			Cache[i].lru = 0;
 			data = Cache[i].data[oST];
 		}
-		else {
-			Cache[i].lru++;
-		}
-		if (Cache[i].lru > maxLRU || Cache[i].tag == -1) {
-			maxLRU = Cache[i].lru;
-			dataSB = i;
-		}
 	}
 
-	if ( !inCache ) {
-		cacheHit(erro);
-		addr = addr >> g_Config.log2bl;
-		addr = addr << g_Config.log2bl;
-		switch (g_Config.politica) {
-			case lru:
-				Cache[dataSB].tag = tag;
-				Cache[dataSB].lru = 0;
-				memcpy(Cache[dataSB].data,&g_memory[addr],g_Config.bloco*sizeof(int));
-				return Cache[dataSB].data[oST];
-			case lfu:
-				break;
-			case fifo:
-				break;
-		}
+	if ( inCache ) return data;
+
+	cacheHit(erro);
+	addr = addr >> g_Config.log2bl;
+	addr = addr << g_Config.log2bl;
+
+	switch (g_Config.politica) {
+		case lru:
+			break;
+		case lfu:
+			break;
+		case fifo:
+			while ( end > start ) {
+				Cache[end].vBit = Cache[end-1].vBit;
+				Cache[end].tag  = Cache[end-1].tag;
+				memcpy(Cache[end].data,Cache[end-1].data,g_Config.bloco*sizeof(int));
+				end--;
+			}
+			Cache[start].vBit = true;
+			Cache[start].tag = tag;
+			memcpy(Cache[start].data,&g_memory[addr],g_Config.bloco*sizeof(int));
+			return Cache[start].data[oST];
 	}
 
-	return data;
+	exit(1);
 }
 
 void wrtCache(cache_t *Cache, int addr, int value) {
 	bool inCache = false;
-	int tag = addr / g_Config.vias;
-	int cjt = addr % g_Config.vias;
 	int oST = addr % g_Config.bloco;
+    int cjt = (addr >> g_Config.log2bl) % g_Config.vias;
+	int tag = addr >> crapLog2foo(g_Config.vias) >> g_Config.log2bl;
 
 	int start = cjt*(g_Config.sets/g_Config.vias);
-	int end = start+(g_Config.sets/g_Config.vias);
+	int end = start+(g_Config.sets/g_Config.vias)-1;
 
 	for (int i=start; i<end; i++) {
 		if ( tag == Cache[i].tag ) {
 			inCache = true;
-			Cache[i].tag = tag;
-			Cache[i].lru = 0;
 			Cache[i].data[oST] = value;
 			g_memory[addr] = value;
+			break;
 		}
 	}
 
-	//assert(inCache);
+	if ( !inCache ) {
+		rdyCache(Cache,addr);
+		wrtCache(Cache,addr,value);
+	}
+
+	assert(inCache);
 }
 
 void prtCache(cache_t *Cache) {
 	system("clear");
 	for (int i=0; i<g_Config.words; i++) {
-		printf(" %02X \u2192 %04d [", i, Cache[i].tag);
+		printf(" %02X \u2192 %d %04d [", i, Cache[i].vBit, Cache[i].tag);
 		for (int j=0; j<g_Config.bloco; j++) {
-			printf(" %06X", Cache[i].data[j]);
+			printf(" %06d", Cache[i].data[j]);
 		}
 		printf(" ]\n");
 	}

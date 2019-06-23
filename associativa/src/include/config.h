@@ -14,8 +14,10 @@ typedef struct Config {
 } config_t;
 
 typedef struct Cache {
+	bool vBit;
 	int tag;
 	int lru;
+	int lfu;
 	int *data;
 } cache_t;
 

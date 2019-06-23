@@ -12,8 +12,8 @@ static const struct {
 };
 
 polSub_t str2enum(const char *str) {
-	for (int i = 0;  i < (int)(sizeof(conversion) / sizeof (conversion[0]));  ++i)
-		if (!strcmp (str, conversion[i].str))
+	for (int i=0; i<(int)(sizeof(conversion)/sizeof(conversion[0])); ++i)
+		if ( !strcmp (str, conversion[i].str) )
 			return conversion[i].val;
 	printf(" Erro: Politica de substituicao, invalida.");
 	exit(1);
@@ -59,10 +59,11 @@ int main(int argc, char *argv[]) {
 	g_resultfile = "quicksort.dat";
 	createFile();
 
-	do {
+ 	do {
 		Cache = iniCache(g_Config);
 		cachesize = sizeof(*Cache->data)*g_Config.words;
-		printf(" %4luB %3d:%02d ", cachesize, g_Config.words, g_Config.bloco);
+		printf(" %4luB %3d:%02d:%02d ", cachesize, 
+		g_Config.words, g_Config.vias, g_Config.bloco);
 		
 		isSorted();
 		printf("\u2192");
@@ -87,7 +88,8 @@ int main(int argc, char *argv[]) {
 	do {
 		Cache = iniCache(g_Config);
 		cachesize = sizeof(*Cache->data)*g_Config.words;
-		printf(" %4luB %3d:%02d ", cachesize, g_Config.words, g_Config.bloco);
+		printf(" %4luB %3d:%02d:%02d ", cachesize, 
+		g_Config.words, g_Config.vias, g_Config.bloco);
 
 		isSorted();
 		printf("\u2192");
@@ -112,7 +114,8 @@ int main(int argc, char *argv[]) {
 	do {
 		Cache = iniCache(g_Config);
 		cachesize = sizeof(*Cache->data)*g_Config.words;
-		printf(" %4luB %3d:%02d ", cachesize, g_Config.words, g_Config.bloco);
+		printf(" %4luB %3d:%02d:%02d ", cachesize, 
+		g_Config.words, g_Config.vias, g_Config.bloco);
 
 		isSorted();
 		printf("\u2192");
@@ -139,7 +142,8 @@ int main(int argc, char *argv[]) {
 	do {
 		Cache = iniCache(g_Config);
 		cachesize = sizeof(*Cache->data)*g_Config.words;
-		printf(" %4luB %3d:%02d ", cachesize, g_Config.words, g_Config.bloco);
+		printf(" %4luB %3d:%02d:%02d ", cachesize, 
+		g_Config.words, g_Config.vias, g_Config.bloco);
 
 		validasoma();
 		printf("\u2192");
@@ -155,6 +159,6 @@ int main(int argc, char *argv[]) {
 		setMEM(restore);
 		iterConfig();
 	} while ( configs() );
-
+ 
 	return 0;
 }

@@ -16,6 +16,7 @@ void setMEM(opcao_t opt) {
 
 	switch (opt) {
 		case create:
+			//debugSRTmem();
 			getMEM();
 			memcpy(g_memBCK,g_memory,sizeof(g_memory));
 			break;
@@ -56,9 +57,13 @@ void prtMEM() {
 }
 
 void iterConfig() {
-	if ( g_Config.bloco < 32 && g_Config.bloco < g_Config.words)
+	if ( g_Config.bloco < 32 && g_Config.bloco < g_Config.words )
 		g_Config.bloco *= 2;
 	else {
+		g_Config.words *= 2;
+		g_Config.bloco = 1;
+	}
+	if ( g_Config.vias >= (g_Config.words/g_Config.bloco) ) {
 		g_Config.words *= 2;
 		g_Config.bloco = 1;
 	}
