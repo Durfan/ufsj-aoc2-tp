@@ -9,7 +9,6 @@ int partition(cache_t *Cache, int start, int end) {
 	for (int i=start; i<end; i++) {
 		if ( rdyCache(Cache,i) <= pivot ) {
 			temp = rdyCache(Cache,i);
-			rdyCache(Cache,i);
 			wrtCache(Cache,i,rdyCache(Cache,pindex));
 			rdyCache(Cache,pindex);
 			wrtCache(Cache,pindex,temp);
@@ -17,7 +16,6 @@ int partition(cache_t *Cache, int start, int end) {
 		}
 	}
 	temp = rdyCache(Cache,pindex);
-	rdyCache(Cache,pindex);
 	wrtCache(Cache,pindex,rdyCache(Cache,end));
 	rdyCache(Cache,end);
 	wrtCache(Cache,end,temp);

@@ -15,22 +15,38 @@ polSub_t str2enum(const char *str) {
 	for (int i=0; i<(int)(sizeof(conversion)/sizeof(conversion[0])); ++i)
 		if ( !strcmp (str, conversion[i].str) )
 			return conversion[i].val;
-	printf(" Erro: Politica de substituicao, invalida.");
+	printf("Politica de substituicao invalida.\n");
+	printf("USO: ./simcache -v [1,2,4,8] -p [lru,lfu,fifo]\n");
 	exit(1);
+}
+
+bool powerOf2(int x) {
+    return x && !(x & (x - 1));
 }
 
 
 int main(int argc, char *argv[]) {
 
-	int parametro;
+	if ( argc < 5 ) {
+		printf("%d \n", argc);
+		printf("USO: ./simcache -v [1,2,4,8] -p [lru,lfu,fifo]\n");
+		exit (1);
+	}
+
+	int parametro, vias;
 	opterr = 0;
 
 	while ((parametro = getopt(argc, argv, "v:p:")) != -1) {
 		switch (parametro) {
 			case 'v':
-				g_Config.vias = atoi(optarg);
+				vias = atoi(optarg);
+				if ( !powerOf2(vias) || vias > 8) {
+					printf("Numero de vias nao suportado.\n");
+					printf("USO: ./simcache -v [1,2,4,8] -p [lru,lfu,fifo]\n");
+					exit (1);
+				}
+				g_Config.vias = vias;
 				break;
-
 			case 'p':
 				g_Config.politica = str2enum(optarg);
 				break;
@@ -41,6 +57,7 @@ int main(int argc, char *argv[]) {
 					printf("Opção '-%c' desconhecida.\n", optopt);
 				else
 					printf("Caractere '\\x%x' de opção desconhecido.\n", optopt );
+				printf("USO: ./simcache -v [1,2,4,8] -p [lru,lfu,fifo]\n");
 				exit (1);
 		}
 	}

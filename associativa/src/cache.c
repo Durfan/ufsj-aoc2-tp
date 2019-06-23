@@ -49,7 +49,7 @@ int rdyCache(cache_t *Cache, int addr) {
 	bool inCache = false;
 	int oST = addr % g_Config.bloco;
     int cjt = (addr >> g_Config.log2bl) % g_Config.vias;
-	int tag = addr >> crapLog2foo(g_Config.vias) >> g_Config.log2bl;
+	int tag = (addr >> g_Config.log2bl) / g_Config.vias;
 	int data, dataSB;
 
 	int start = cjt*(g_Config.sets/g_Config.vias);
@@ -94,7 +94,7 @@ void wrtCache(cache_t *Cache, int addr, int value) {
 	bool inCache = false;
 	int oST = addr % g_Config.bloco;
     int cjt = (addr >> g_Config.log2bl) % g_Config.vias;
-	int tag = addr >> crapLog2foo(g_Config.vias) >> g_Config.log2bl;
+	int tag = (addr >> g_Config.log2bl) / g_Config.vias;
 
 	int start = cjt*(g_Config.sets/g_Config.vias);
 	int end = start+(g_Config.sets/g_Config.vias)-1;
@@ -113,15 +113,17 @@ void wrtCache(cache_t *Cache, int addr, int value) {
 		wrtCache(Cache,addr,value);
 	}
 
-	assert(inCache);
+	//printf("------------------ addr: %d\n", addr);
+
+	//assert(inCache);
 }
 
 void prtCache(cache_t *Cache) {
 	system("clear");
-	for (int i=0; i<g_Config.words; i++) {
+	for (int i=0; i<g_Config.sets; i++) {
 		printf(" %02X \u2192 %d %04d [", i, Cache[i].vBit, Cache[i].tag);
 		for (int j=0; j<g_Config.bloco; j++) {
-			printf(" %06d", Cache[i].data[j]);
+			printf(" %06X", Cache[i].data[j]);
 		}
 		printf(" ]\n");
 	}
