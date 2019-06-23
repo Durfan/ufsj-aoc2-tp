@@ -40,7 +40,7 @@ void cacheHit(opcao_t opt) {
 			miss = 0;
 			break;
 		default:
-			exit(1);
+			exit(EXIT_FAILURE);
 	}
 }
 

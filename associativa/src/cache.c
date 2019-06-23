@@ -41,16 +41,21 @@ void cacheHit(opcao_t opt) {
 			miss = 0;
 			break;
 		default:
-			exit(1);
+			exit(EXIT_FAILURE);
 	}
 }
 
+int rndSubst() {
+	return rand() % 2;
+}
+
 int rdyCache(cache_t *Cache, int addr) {
+	static int ciclo;
 	bool inCache = false;
 	int oST = addr % g_Config.bloco;
     int cjt = (addr >> g_Config.log2bl) % g_Config.vias;
 	int tag = (addr >> g_Config.log2bl) / g_Config.vias;
-	int data, dataSB;
+	int data, rand, maxlfu, datasub;
 
 	int start = cjt*(g_Config.sets/g_Config.vias);
 	int end = start+(g_Config.sets/g_Config.vias)-1;
@@ -59,35 +64,78 @@ int rdyCache(cache_t *Cache, int addr) {
 		if ( Cache[i].vBit && tag == Cache[i].tag ) {
 			cacheHit(acerto);
 			inCache = true;
+			Cache[i].lru = 0;
+			Cache[i].lfu = 0;
 			data = Cache[i].data[oST];
+		}
+		else {
+			Cache[i].lru = 1;
+			if ( ciclo < 10 )
+				Cache[i].lfu++;
+			else
+				Cache[i].lfu = 0;
 		}
 	}
 
-	if ( inCache ) return data;
+	if ( !inCache ) {
+		cacheHit(erro);
+		addr = addr >> g_Config.log2bl;
+		addr = addr << g_Config.log2bl;
 
-	cacheHit(erro);
-	addr = addr >> g_Config.log2bl;
-	addr = addr << g_Config.log2bl;
-
-	switch (g_Config.politica) {
-		case lru:
-			break;
-		case lfu:
-			break;
-		case fifo:
-			while ( end > start ) {
-				Cache[end].vBit = Cache[end-1].vBit;
-				Cache[end].tag  = Cache[end-1].tag;
-				memcpy(Cache[end].data,Cache[end-1].data,g_Config.bloco*sizeof(int));
-				end--;
-			}
-			Cache[start].vBit = true;
-			Cache[start].tag = tag;
-			memcpy(Cache[start].data,&g_memory[addr],g_Config.bloco*sizeof(int));
-			return Cache[start].data[oST];
+		switch (g_Config.politica) {
+			case lru:
+				for (int i=start; i<end; i++) {
+					rand = rndSubst();
+					if ( rand && Cache[i].lru ) {
+						Cache[i].vBit = true;
+						Cache[i].tag = tag;
+						Cache[i].lru = 0;
+						memcpy(Cache[i].data,&g_memory[addr],g_Config.bloco*sizeof(int));
+						data = Cache[i].data[oST];
+						break;
+					}
+				}
+				if ( !rand ) {
+					Cache[start].vBit = true;
+					Cache[start].tag = tag;
+					Cache[start].lru = 0;
+					memcpy(Cache[start].data,&g_memory[addr],g_Config.bloco*sizeof(int));
+					data = Cache[start].data[oST];
+				}
+				break;
+			case lfu:
+				maxlfu = Cache[start].lfu;
+				for (int i=start; i<end; i++) {
+					if ( Cache[i].lfu >= maxlfu ) {
+						maxlfu = Cache[i].lfu;
+						datasub = i;
+					}
+				}
+				Cache[datasub].vBit = true;
+				Cache[datasub].tag = tag;
+				Cache[datasub].lfu = 0;
+				memcpy(Cache[datasub].data,&g_memory[addr],g_Config.bloco*sizeof(int));
+				data = Cache[datasub].data[oST];
+				break;
+			case fifo:
+				while ( end > start ) {
+					Cache[end].vBit = Cache[end-1].vBit;
+					Cache[end].tag  = Cache[end-1].tag;
+					memcpy(Cache[end].data,Cache[end-1].data,g_Config.bloco*sizeof(int));
+					end--;
+				}
+				Cache[start].vBit = true;
+				Cache[start].tag = tag;
+				memcpy(Cache[start].data,&g_memory[addr],g_Config.bloco*sizeof(int));
+				data = Cache[start].data[oST];
+				break; 
+		}
 	}
 
-	exit(1);
+	if ( ciclo < 10 ) ciclo++;
+	else ciclo = 0;
+
+	return data;
 }
 
 void wrtCache(cache_t *Cache, int addr, int value) {
@@ -112,8 +160,6 @@ void wrtCache(cache_t *Cache, int addr, int value) {
 		rdyCache(Cache,addr);
 		wrtCache(Cache,addr,value);
 	}
-
-	//printf("------------------ addr: %d\n", addr);
 
 	//assert(inCache);
 }

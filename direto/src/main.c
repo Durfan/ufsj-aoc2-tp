@@ -114,5 +114,5 @@ int main(void) {
 		iterConfig();
 	} while ( configs() );
 
-	return 0;
+	return EXIT_SUCCESS;
 }

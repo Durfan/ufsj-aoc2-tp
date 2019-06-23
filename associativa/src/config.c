@@ -3,7 +3,7 @@
 
 void getMEM() {
 	FILE *fp = fopen(SEEDARQ,"r");
-	if (fp == NULL) exit(1);
+	if (fp == NULL) exit(EXIT_FAILURE);
 
 	for (int i=0; i<MEMSIZE; i++) {
 		fgets((char*)&g_memory[i], 4, fp);
@@ -28,7 +28,7 @@ void setMEM(opcao_t opt) {
 			memcpy(g_memory,g_memBCK,sizeof(g_memBCK));
 			break;
 		default:
-			exit(1);
+			exit(EXIT_FAILURE);
 	}
 }
 
@@ -86,7 +86,7 @@ int crapLog2foo(int x) {
 		case 8:  return 3;
 		case 16: return 4;
 		case 32: return 5;
-		default: exit(1);
+		default: exit(EXIT_FAILURE);
 	}
 }
 
