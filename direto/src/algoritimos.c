@@ -1,4 +1,4 @@
-#include "./include/main.h"
+#include "./include/Main.h"
 
 
 int partition(cache_t *Cache, int start, int end) {

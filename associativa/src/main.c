@@ -1,4 +1,4 @@
-#include "./include/main.h"
+#include "./include/Main.h"
 #include <ctype.h>
 #include <unistd.h>
 
@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
 	if ( argc < 5 ) {
 		printf("%d \n", argc);
 		printf("USO: ./simcache -v [1,2,4,8] -p [lru,lfu,fifo]\n");
-		exit (EXIT_FAILURE);
+		exit(EXIT_FAILURE);
 	}
 
 	int parametro, vias;
@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
 				if ( !powerOf2(vias) || vias > 8) {
 					printf("Numero de vias nao suportado.\n");
 					printf("USO: ./simcache -v [1,2,4,8] -p [lru,lfu,fifo]\n");
-					exit (EXIT_FAILURE);
+					exit(EXIT_FAILURE);
 				}
 				g_Config.vias = vias;
 				break;
@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
 				else
 					printf("Caractere '\\x%x' de opção desconhecido.\n", optopt );
 				printf("USO: ./simcache -v [1,2,4,8] -p [lru,lfu,fifo]\n");
-				exit (EXIT_FAILURE);
+				exit(EXIT_FAILURE);
 		}
 	}
 
