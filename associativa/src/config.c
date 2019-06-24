@@ -116,12 +116,14 @@ void saveResult(float hitrate, float missrate) {
 	assert(fp);
 
 	if ( g_Config.bloco == 1 )
-		fprintf(fp, "\"%dB\"\n", g_Config.words*4);
+		fprintf(fp, "\n\n\"%dB\"\n", g_Config.words*4);
 
 	fprintf(fp, "%d %d %05.2f %05.2f\n", g_Config.words, g_Config.bloco, hitrate, missrate);
 
+	/* 
 	if ( (g_Config.words == g_Config.bloco) || (g_Config.bloco == 32) )
 		fprintf(fp, "\n\n");
+	*/
 
 	fclose(fp);
 }
