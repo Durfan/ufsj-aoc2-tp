@@ -72,7 +72,7 @@ void bubbleSrt(cache_t *Cache) {
 void somavetor(cache_t *Cache) {
 	int divsize = MEMSIZE/4;
 	int addrV1 = 0;
-	int addrV2 = divsize; // 1024
+	int addrV2 = divsize;	// 1024
 	int addrV3 = divsize*2; // 2048
 
 	for (int i=0; i<divsize; i++) {
