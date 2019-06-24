@@ -27,3 +27,7 @@ make
 gnuplot plot.gp
 ```
 Obs.: Para a Cache totalmente associativa, setar o número de vias em 1. 
+
+## Changelog
+
+![Despair](./docs/despair.png)
