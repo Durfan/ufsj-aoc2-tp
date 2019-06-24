@@ -29,7 +29,6 @@ int main(int argc, char *argv[]) {
 	srand(time(NULL));
 
 	if ( argc < 5 ) {
-		printf("%d \n", argc);
 		printf("USO: ./simcache -v [1,2,4,8] -p [lru,lfu,fifo]\n");
 		exit(EXIT_FAILURE);
 	}
