@@ -1,4 +1,4 @@
-# AOCII Primeiro Trabalho Prático - 2019.1
+# AOCII Trabalho Prático - 2019.1
 
 ## Simulador de Cache
 
