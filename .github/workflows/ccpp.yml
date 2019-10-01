@@ -9,7 +9,5 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
-    - name: direto
-      run: cd direto
     - name: make
-      run: make
+      run: ./direto/make
